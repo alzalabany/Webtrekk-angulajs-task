@@ -1,0 +1,1 @@
+!function(e){"use strict";e.module("webtrekk",["ui.router"]).config(["$urlRouterProvider",function(e){"ngInject";e.otherwise("/")}])}(angular);

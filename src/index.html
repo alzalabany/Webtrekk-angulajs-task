@@ -1,0 +1,37 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+  
+    <base href="/">
+  
+    <title>Webtrekk --Momen Zalabany</title>
+  
+    <!--bootstrap and our app css file-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="app.css">
+  
+    <!--vendor-->
+    <script src="_vendor.js"></script>
+
+    <!--our angular app-->
+    <script src="_app.js"></script>
+
+    <!--during dev only-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="_socket.js"></script>
+  </head>
+  
+  <body ng-app="webtrekk">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand">MeetIrl</a>
+        </div>
+      </div>
+    </nav>
+  
+    <div ui-view>Loading Awsomeness...</div>
+  </body>
+  </html>
