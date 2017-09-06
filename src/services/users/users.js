@@ -15,7 +15,7 @@
     Users.actions = {};
     Users.values = {
       master: initialMaster,
-      nav: initialNav,
+      nav: initialNav
     };
     Users.store = {};
     return Users;

@@ -9,7 +9,7 @@ var express = require('express'),
     readJson = require('read-package-json'),
     compression = require('compression'); //gzip resplose
 var __DEV__ = process.env.NODE_ENV !== 'production';
-var build = require('./build');
+var webtrekk = require('./webtrekk_build');
 
 console.log('Starting in '+process.env.NODE_ENV+' mode');
 
@@ -36,7 +36,7 @@ app.get('*', function(req, res) {
 
 if(!__DEV__){
   app.listen(8080);
-  build(false, true);
+  webtrekk.build(false); // rebuild all..
   return console.log('running on 8080 in production mode');
   // dont continue..
 }
@@ -56,15 +56,24 @@ readJson(path.join(__dirname+'/package.json'), console.error, false, function (e
     io.on('connection', function(socket){
       console.log('a user connected');
     });
-    chokidar.watch('./src', {ignored: /(^|[\/\\])\../}).on('all', (event, path) => {
-      console.log('C:detected a change on +', path);
-      console.log(event, path);
-      build(true);
-      io.emit('reload_please', { for: 'everyone' });
-    });
-    fs.watch('./src', { encoding: 'utf8' }, (eventType, filename) => {
-      console.log('detected a change on +', filename);
-      build(true);
+    chokidar.watch('./src').on('all', (event, path) => {
+      if(event==='add')return;
+      let ext = path.split('.').pop();
+      // console.log(ext+':detected a change on +', path);
+      switch (ext) {
+        case 'css':
+          console.log('updating css');
+          webtrekk.updateAppCss();
+          return;
+        case 'js':
+        case 'html':
+          console.log('updating app.js');
+          webtrekk.updateAppJsAndHtml();
+          return;
+        default:
+          return;
+      }
+      console.log('triggering reload');
       io.emit('reload_please', { for: 'everyone' });
     });
  });

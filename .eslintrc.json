@@ -2,18 +2,9 @@
     "extends": ["eslint:recommended"],
     "env": {
         "browser": true,
-        "commonjs": true,
         "es6": true,
         "node": true,
-        "jasmine": true,
-        "mocha": true,
-        "amd": true
-    },
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": false
-        },
-        "sourceType": "module"
+        "jasmine": true
     },
     "globals" : {
         "angular"    : false,

@@ -28,39 +28,20 @@
   'use strict';
 
   config.$inject = ["$stateProvider", "$urlServiceProvider"];
-  controller.$inject = ["usersStore"];
-  angular.module('webtrekk').config(config).run(run).directive('main', function () {
+  angular.module('webtrekk').config(config).directive('main', function () {
     return {
       templateUrl: '/main/main.html',
       scope: {},
-      controllerAs: "$ctrl",
-      replace: false,
-      controller: controller
-    };
-  }).directive('userRows', function () {
-    return {
-      scope: {
-        user: '=user'
-      },
-      controllerAs: "$ctrl",
       replace: true,
-      // template: "<div>\n\n</div>",
-      templateUrl: '/main/row.html',
-      controller: ["$scope", function controller($scope) {
-        "ngInject";
-
-        console.log('Row', this, $scope);
-        this.user = $scope.user;
-      }]
+      controllerAs: "$ctrl",
+      controller: 'mainController'
     };
   });
 
   function config($stateProvider, $urlServiceProvider) {
     "ngInject";
-
-    console.log('configuring users component');
-
     // setting self as main route
+
     $urlServiceProvider.rules.otherwise({ state: 'userlist' });
 
     $stateProvider.state('userlist', {
@@ -68,14 +49,15 @@
       template: "<main></main>"
     });
   }
+})(angular);
 
-  function run() {
-    "ngInject";
+(function (angular) {
+  'use strict';
 
-    console.log('running users component');
-  }
+  mainController.$inject = ["usersStore"];
+  angular.module('webtrekk').controller('mainController', mainController);
 
-  function controller(usersStore) {
+  function mainController(usersStore) {
     var _this = this;
 
     this.$onDestroy = componentWillUnmount.bind(this);
@@ -135,7 +117,6 @@
   'use strict';
 
   angular.module("webtrekk").run(["$templateCache", function ($templateCache) {
-    $templateCache.put("/main/row.html", "<tr>\n  <td ng-repeat=\"col in $ctrl.user\">\n    <a>\n      {{ col }}\n    </a>\n  </td>\n  <td>\n      <button ng-click=\"$ctrl.onToggleActive({ userId: $ctrl.user.id })\">\n          {{ $ctrl.user.active ? \"Deactivate\" : \"Activate\" }}\n      </button>\n  </td>\n</tr>");
-    $templateCache.put("/main/main.html", "<table>\n  <tr ng-repeat=\"row in $ctrl.users.values.master\">\n      <td ng-repeat=\"col in row\">\n        <a>\n          {{ col }}\n        </a>\n      </td>\n      <td>\n          <button ng-click=\"$ctrl.onToggleActive({ userId: $ctrl.user.id })\">\n              {{ $ctrl.user.active ? \"Deactivate\" : \"Activate\" }}\n          </button>\n      </td>\n    </tr>\n</table>");
+    $templateCache.put("/main/main.html", "<table>\n  <tr ng-repeat=\"row in $ctrl.users.values.master\">\n      <td ng-repeat=\"col in row\">\n        <a>\n          {{ col }}\n        </a>\n      </td>\n      <td>\n          <button ng-click=\"$ctrl.onToggleActive({ userId: $ctrl.user.id })\">\n              {{ $ctrl.user.active ? \"Deactivate\" : \"Activate\" }}\n          </button>\n          <button ng-click=\"$ctrl.onToggleActive({ userId: $ctrl.user.id })\">\n              {{ $ctrl.user.active ? \"Deactivate\" : \"Activate\" }}\n          </button>\n      </td>\n    </tr>\n</table>");
   }]);
 })(angular);

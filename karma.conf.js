@@ -15,9 +15,9 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'public/vendor.js',
-      'node_modules/angular-mocks/angular-mocks.js',
-      'public/app.js',
+      // 'public/vendor.js',
+      // 'node_modules/angular-mocks/angular-mocks.js',
+      // 'public/app.js',
       'src/**/*.spec.js',
     ],
 
@@ -88,6 +88,12 @@ module.exports = function(config) {
         {type: 'text-summary'},
         {type: 'html'}
       ]
+    },
+    webpack: require('./webpack.config'),
+
+    // Hide webpack build information from output
+    webpackMiddleware: {
+      noInfo: 'errors-only'
     }
   })
 }
