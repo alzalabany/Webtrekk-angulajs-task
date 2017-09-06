@@ -18,9 +18,10 @@
   angular.module('webtrekk', [
     'ui.router'
   ])
-  .config(function($urlRouterProvider) {
+  .config(function($urlServiceProvider, $locationProvider) {
     "ngInject";
-    $urlRouterProvider.otherwise("/");
+    $locationProvider.html5Mode(true);
   });
 
 })(angular);
+

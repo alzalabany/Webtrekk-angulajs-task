@@ -1,0 +1,12 @@
+<tr>
+  <td ng-repeat="col in $ctrl.user">
+    <a>
+      {{ col }}
+    </a>
+  </td>
+  <td>
+      <button ng-click="$ctrl.onToggleActive({ userId: $ctrl.user.id })">
+          {{ $ctrl.user.active ? "Deactivate" : "Activate" }}
+      </button>
+  </td>
+</tr>

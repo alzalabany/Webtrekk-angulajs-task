@@ -1,15 +1,17 @@
+/* eslint-disable */
 var express = require('express'),
     fs = require('fs'),
     app = express(),
     bodyParser = require('body-parser'),
     morgan = require('morgan'),
-    http = require('http').Server(app),
-    io = require('socket.io')(http),
     path = require('path'),
+    chokidar = require('chokidar'),
     readJson = require('read-package-json'),
     compression = require('compression'); //gzip resplose
+var __DEV__ = process.env.NODE_ENV !== 'production';
+var build = require('./build');
 
-
+console.log('Starting in '+process.env.NODE_ENV+' mode');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -26,12 +28,18 @@ app.use(function(req, res, next) {
 
 app.use(morgan('dev'));
 
-app.use(express.static(__dirname + '/src', { redirect: false }));
+app.use(express.static(__dirname + '/public', { redirect: false }));
 
 app.get('*', function(req, res) {
-  console.log('returning')
-  res.sendFile(path.join(__dirname + '/src/index.html'));
+  res.sendFile(path.join(__dirname + '/public/index.html'));
 });
+
+if(!__DEV__){
+  app.listen(8080);
+  build(false, true);
+  return console.log('running on 8080 in production mode');
+  // dont continue..
+}
 
 readJson(path.join(__dirname+'/package.json'), console.error, false, function (er, data) {
   if (er) {
@@ -40,23 +48,26 @@ readJson(path.join(__dirname+'/package.json'), console.error, false, function (e
     exit(0);
     return;
   }
-
-  // building app files;
-
-  // app.listen(8080);
-  http.listen(8080, function(){
-    console.log(data.name+' version:'+data.version+' is running on 8080');
-  });
-  io.on('connection', function(socket){
-    console.log('a user connected');
-  });
+    var http = require('http').Server(app),
+    io = require('socket.io')(http);
+    http.listen(8080, function(){
+      console.log(data.name+' version:'+data.version+' is running on 8080');
+    });
+    io.on('connection', function(socket){
+      console.log('a user connected');
+    });
+    chokidar.watch('./src', {ignored: /(^|[\/\\])\../}).on('all', (event, path) => {
+      console.log('C:detected a change on +', path);
+      console.log(event, path);
+      build(true);
+      io.emit('reload_please', { for: 'everyone' });
+    });
+    fs.watch('./src', { encoding: 'utf8' }, (eventType, filename) => {
+      console.log('detected a change on +', filename);
+      build(true);
+      io.emit('reload_please', { for: 'everyone' });
+    });
  });
 
-const build = require('./build');
-fs.watch('./src', { encoding: 'utf8' }, (eventType, filename) => {
-  if (filename && filename.indexOf('_')!==0) {
-    console.log(filename);
-    build(true);
-    io.emit('reload_please', { for: 'everyone' });
-  }
-});
+
+/* eslint-enable */
