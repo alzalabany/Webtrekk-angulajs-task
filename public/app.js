@@ -117,6 +117,6 @@
   'use strict';
 
   angular.module("webtrekk").run(["$templateCache", function ($templateCache) {
-    $templateCache.put("/main/main.html", "<table>\n  <tr ng-repeat=\"row in $ctrl.users.values.master\">\n      <td ng-repeat=\"col in row\">\n        <a>\n          {{ col }}\n        </a>\n      </td>\n      <td>\n          <button ng-click=\"$ctrl.onToggleActive({ userId: $ctrl.user.id })\">\n              {{ $ctrl.user.active ? \"Deactivate\" : \"Activate\" }}\n          </button>\n          <button ng-click=\"$ctrl.onToggleActive({ userId: $ctrl.user.id })\">\n              {{ $ctrl.user.active ? \"Deactivate\" : \"Activate\" }}\n          </button>\n      </td>\n    </tr>\n</table>");
+    $templateCache.put("/main/main.html", "<table>\n <tr ng-repeat=\"row in $ctrl.users.values.master\">\n <td ng-repeat=\"col in row\">\n <a>\n {{ col }}\n </a>\n </td>\n <td>\n <button ng-click=\"$ctrl.onToggleActive({ userId: $ctrl.user.id })\">\n {{ $ctrl.user.active ? \"Deactivate\" : \"Activate\" }}\n </button>\n <button ng-click=\"$ctrl.onToggleActive({ userId: $ctrl.user.id })\">\n {{ $ctrl.user.active ? \"Deactivate\" : \"Activate\" }}\n </button>\n </td>\n </tr>\n</table>");
   }]);
 })(angular);

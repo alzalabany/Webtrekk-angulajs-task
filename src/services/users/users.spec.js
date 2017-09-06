@@ -6,8 +6,8 @@ describe('Users factory', function() {
     beforeEach(angular.mock.module('webtrekk'));
 
     // Before each test set our injected Users factory (_Users_) to our local Users variable
-    beforeEach(inject(function(_Users_) {
-      Users = _Users_;
+    beforeEach(inject(function(usersStore) {
+      Users = usersStore;
     }));
     it('should exist', function() {
       expect(Users).toBeDefined();

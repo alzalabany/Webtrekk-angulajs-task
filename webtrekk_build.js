@@ -25,10 +25,9 @@ var fs = require('fs-extra'),
 
 var babelOptions = {
   "presets": [
-    "es2015",
     ["env", {
       "targets": {
-        "browsers": ["last 2 versions", "safari >= 8", "IE >= 10"]
+        "browsers": ["last 2 versions", "safari >= 8"]
       }
     }]
   ]
@@ -38,6 +37,7 @@ var globOptions = {
   cwd:srcDir,
   ignore:[
     '**/*.spec.js',
+    '**/*.e2e.js',
     'index.html',
   ]
 };

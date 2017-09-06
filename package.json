@@ -6,10 +6,11 @@
   "scripts": {
     "test": "karma start",
     "test-watch": "karma start --auto-watch --no-single-run",
-    "run": "NODE_ENV=production node ./index.js",
-    "start": "node ./index.js all",
-    "build": "node ./build.js",
-    "dev": "concurrently --kill-others \"npm run start\" \"npm run test\""
+    "live": "NODE_ENV=production node ./index.js",
+    "start": "node ./index.js skip",
+    "build": "node ./webtrekk_build.js all",
+    "e2e": "npm run build && protractor ./protractor.conf.js",
+    "dev": "concurrently --kill-others \"npm run start\" "
   },
   "repository": {
     "type": "git",
