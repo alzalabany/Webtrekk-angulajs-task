@@ -2,10 +2,11 @@
 var fs = require('fs-extra'),
     ngAnnotate = require('ng-annotate'),
     babel = require("babel-core"),
-    concat = require("babel-concat").transform,
     UglifyJS = require('uglify-js'),
     glob = require('glob'),
     templatecache = require('ng-templatecache'),
+    autoprefixer = require('autoprefixer'),
+    postcss      = require('postcss'),
     vendors = [
       "./node_modules/angular/angular.min.js",
       "./node_modules/@uirouter/angularjs/release/angular-ui-router.min.js"
@@ -108,10 +109,15 @@ src = (__PRO__) ? UglifyJS.minify(src) : {code: src};
 
 function updateAppCss(){
    // prepare css;
-   src = glob.sync('**/*.css', globOptions).map(File=>fs.readFileSync(srcDir+'/'+File, "utf8")).join("\n")
+   var css = glob.sync('**/*.css', globOptions).map(File=>fs.readFileSync(srcDir+'/'+File, "utf8")).join("\n")
    fs.ensureFileSync(appCss);
-   fs.outputFileSync(appCss, src);
-   console.log('_app.css updated');
+   postcss([ autoprefixer ]).process(css).then(function (result) {
+    result.warnings().forEach(function (warn) {
+        console.warn(warn.toString());
+    });
+    fs.outputFileSync(appCss, result.css);
+    console.log('_app.css prefixed and updated');
+   });
 }
 
 function build(skip_vendor){
