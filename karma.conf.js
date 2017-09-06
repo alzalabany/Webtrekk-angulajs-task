@@ -30,7 +30,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'src/**/[^.]+.js': 'coverage'
+        'public/app.js': 'coverage',
     },
 
 
@@ -68,7 +68,8 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'], //, 'Firefox'
+    browsers: ['Chrome'],
+    // browsers : ['Chrome', 'Firefox']
 
 
     // Continuous Integration mode
@@ -80,6 +81,9 @@ module.exports = function(config) {
     concurrency: Infinity,
 
     coverageReporter: {
+      instrumenterOptions: {
+        istanbul: { noCompact: true }
+      },
       dir: 'coverage/',
       reporters: [
         {type: 'text-summary'},

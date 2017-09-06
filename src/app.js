@@ -21,6 +21,6 @@
   .config(function($urlServiceProvider, $locationProvider) {
     "ngInject";
     $locationProvider.html5Mode(true);
-  });
+  }); // use it to inject global 3rd parties
 
 })(angular);

@@ -1,5 +1,9 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 /*
   Main Module Definition.
   - We will be using RoC reverse control pattern for better flexisblity
@@ -17,11 +21,14 @@
 (function (angular) {
   'use strict';
 
-  angular.module('webtrekk', ['ui.router']).config(["$urlServiceProvider", "$locationProvider", function ($urlServiceProvider, $locationProvider) {
+  angular.module('webtrekk', ['ui.router']).constant('engine', localStorage).constant('initialState', {
+    master: [{ "customer_id": "1", "first_name": "Peter", "last_name": "Smith", "birthday": "1996-10-12", "gender": "m", "last_contact": "2013-06-01", "customer_lifetime_value": "191,12" }, { "customer_id": "2", "first_name": "Anna", "last_name": "Hopp", "birthday": "1987-05-03", "gender": "w", "last_contact": "2013-07-08", "customer_lifetime_value": "50,99" }, { "customer_id": "3", "first_name": "Christian", "last_name": "Cox", "birthday": "1991-02-21", "gender": "m", "last_contact": "2013-08-01", "customer_lifetime_value": "0" }, { "customer_id": "4", "first_name": "Roxy", "last_name": "Fox", "birthday": "1979-06-30", "gender": "w", "last_contact": "2012-01-29", "customer_lifetime_value": "213,12" }, { "customer_id": "5", "first_name": "Eric", "last_name": "Adam", "birthday": "1969-11-21", "gender": "m", "last_contact": "2013-03-18", "customer_lifetime_value": "1019,91" }],
+    navi: [{ "customer_id": "1", "pages": "A", "timestamp": "2013-06-01 10:10:12" }, { "customer_id": "1", "pages": "B", "timestamp": "2013-06-01 10:11:12" }, { "customer_id": "1", "pages": "A", "timestamp": "2013-06-01 10:12:12" }, { "customer_id": "2", "pages": "C", "timestamp": "2013-07-08 09:03:09" }, { "customer_id": "2", "pages": "A", "timestamp": "2013-07-08 09:09:09" }, { "customer_id": "2", "pages": "D", "timestamp": "2013-07-08 09:19:09" }, { "customer_id": "3", "pages": "B", "timestamp": "2013-07-08 09:19:09" }, { "customer_id": "3", "pages": "A", "timestamp": "2013-07-08 09:19:10" }, { "customer_id": "4", "pages": "D", "timestamp": "2013-07-08 09:19:11" }, { "customer_id": "4", "pages": "A", "timestamp": "2013-07-08 09:19:12" }, { "customer_id": "5", "pages": "X", "timestamp": "2013-07-08 09:19:13" }, { "customer_id": "5", "pages": "A", "timestamp": "2013-07-08 09:19:14" }, { "customer_id": "5", "pages": "B", "timestamp": "2013-07-08 09:19:15" }]
+  }).config(["$urlServiceProvider", "$locationProvider", function ($urlServiceProvider, $locationProvider) {
     "ngInject";
 
     $locationProvider.html5Mode(true);
-  }]);
+  }]); // use it to inject global 3rd parties
 })(angular);
 
 (function (angular) {
@@ -234,26 +241,152 @@ angular.module('webtrekk').filter('genderFilter', function () {
 (function (angular) {
   'use strict';
 
-  angular.module('webtrekk').factory('usersStore', usersFactory);
+  $dataProvider.$inject = ["initialState"];
+  angular.module('webtrekk').factory('$dataProvider', $dataProvider);
 
-  function usersFactory() {
+  function $dataProvider(initialState) {
     "ngInject";
 
-    var initialMaster = { "1": { "customer_id": "1", "first_name": "Peter", "last_name": "Smith", "birthday": "1996-10-12", "gender": "m", "last_contact": "2013-06-01", "customer_lifetime_value": "191,12" }, "2": { "customer_id": "2", "first_name": "Anna", "last_name": "Hopp", "birthday": "1987-05-03", "gender": "w", "last_contact": "2013-07-08", "customer_lifetime_value": "50,99" }, "3": { "customer_id": "3", "first_name": "Christian", "last_name": "Cox", "birthday": "1991-02-21", "gender": "m", "last_contact": "2013-08-01", "customer_lifetime_value": "0" }, "4": { "customer_id": "4", "first_name": "Roxy", "last_name": "Fox", "birthday": "1979-06-30", "gender": "w", "last_contact": "2012-01-29", "customer_lifetime_value": "213,12" }, "5": { "customer_id": "5", "first_name": "Eric", "last_name": "Adam", "birthday": "1969-11-21", "gender": "m", "last_contact": "2013-03-18", "customer_lifetime_value": "1019,91" } };
-    var initialNav = [{ "customer_id": "1", "pages": "A", "timestamp": "2013-06-01 10:10:12" }, { "customer_id": "1", "pages": "B", "timestamp": "2013-06-01 10:11:12" }, { "customer_id": "1", "pages": "A", "timestamp": "2013-06-01 10:12:12" }, { "customer_id": "2", "pages": "C", "timestamp": "2013-07-08 09:03:09" }, { "customer_id": "2", "pages": "A", "timestamp": "2013-07-08 09:09:09" }, { "customer_id": "2", "pages": "D", "timestamp": "2013-07-08 09:19:09" }, { "customer_id": "3", "pages": "B", "timestamp": "2013-07-08 09:19:09" }, { "customer_id": "3", "pages": "A", "timestamp": "2013-07-08 09:19:10" }, { "customer_id": "4", "pages": "D", "timestamp": "2013-07-08 09:19:11" }, { "customer_id": "4", "pages": "A", "timestamp": "2013-07-08 09:19:12" }, { "customer_id": "5", "pages": "X", "timestamp": "2013-07-08 09:19:13" }, { "customer_id": "5", "pages": "A", "timestamp": "2013-07-08 09:19:14" }, { "customer_id": "5", "pages": "B", "timestamp": "2013-07-08 09:19:15" }];
-    var Users = {};
+    this.initialState = initialState;
 
-    Users.method = function () {
-      var f = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      return Object.assign({}, f);
+    return factory.bind(this);
+  }
+
+  function factory(engine, name) {
+    var initialState = this.initialState;
+
+
+    if (!initialState[name]) {
+      throw 'invlaid data requested';
+    }
+
+    if (!('setItem' in engine) || !('getItem' in engine)) {
+      throw 'invlaid engine provided';
+    }
+
+    var STORAGE_ID = 'webtrekk_' + name;
+
+    return {
+      name: STORAGE_ID,
+      get: function get() {
+        try {
+          var json = JSON.parse(engine.getItem(STORAGE_ID));
+          if (!json || (typeof json === 'undefined' ? 'undefined' : _typeof(json)) !== _typeof(initialState[name])) {
+            throw 'no intialdata';
+          }
+          return json;
+        } catch (e) {
+          this.set(initialState[name]);
+          return initialState[name];
+        }
+      },
+      set: function set(data) {
+        engine.setItem(STORAGE_ID, JSON.stringify(data));
+      },
+      delete: function _delete() {
+        engine.put(STORAGE_ID, []);
+      },
+      reload: function reload() {
+        this.set(initialState[name]);
+        return this.get();
+      }
     };
-    Users.actions = {};
-    Users.values = {
-      master: initialMaster,
-      nav: initialNav
+  }
+})(angular);
+(function (angular) {
+  'use strict';
+
+  usersStore.$inject = ["$dataProvider"];
+  $dataProvider.$inject = ["initialState"];
+  angular.module('webtrekk').service('usersStore', usersStore).factory('$dataProvider', $dataProvider);
+
+  function $dataProvider(initialState) {
+    "ngInject";
+
+    return function factory(engine, name, id) {
+      if (!initialState[name]) {
+        throw 'invlaid data requested';
+      }
+      if (!('setItem' in engine) || !('getItem' in engine)) {
+        throw 'invlaid engine provided';
+      }
+
+      var STORAGE_ID = 'webtrekk_' + name;
+      var normalize = function normalize(s) {
+        return String(s).toLowerCase();
+      };
+      return {
+        name: STORAGE_ID,
+        get: function get() {
+          try {
+            var json = JSON.parse(engine.getItem(STORAGE_ID));
+            if (!json || (typeof json === 'undefined' ? 'undefined' : _typeof(json)) !== _typeof(initialState[name])) {
+              throw 'no intialdata';
+            }
+            return json;
+          } catch (e) {
+            this.set(initialState[name]);
+            return initialState[name];
+          }
+        },
+        getBy: function getBy(val, primary_key) {
+          var data = this.get();
+          var _id = primary_key || 'customer_id';
+          val = normalize(val);
+
+          return Array.from(data).filter(function (i) {
+            return normalize(i[_id]) === val;
+          });
+        },
+        put: function put(id, Or) {
+          var data = this.get();
+          return id in data ? data[id] : Or || null;
+        },
+        set: function set(data) {
+          engine.setItem(STORAGE_ID, JSON.stringify(data));
+        },
+        delete: function _delete() {
+          engine.put(STORAGE_ID, []);
+        }
+      };
     };
-    Users.store = {};
-    return Users;
+  }
+
+  function usersStore($dataProvider) {
+    "ngInject";
+
+    var master = $dataProvider(localStorage, 'master');
+    var navi = $dataProvider(localStorage, 'navi');
+
+    var data = {
+      navi: navi.get(),
+      master: master.get()
+    };
+
+    var getNavigations = function getNavigations(id) {
+      var _this3 = this;
+
+      return data.navi.filter(function (i) {
+        return i.customer_id === _this3.customer_id;
+      });
+    };
+
+    data.byId = data.master.reduce(function (carry, item) {
+      return Object.assign(carry, _defineProperty({}, item.customer_id, Object.assign({
+        getNavigations: getNavigations.bind(item)
+      }, item)));
+    }, {});
+    data.ids = Object.keys(data.byId);
+    data.sortBy = function (key) {
+      this.ids = this.ids.sort(function (a, b) {
+        return data[a][key] === data[b][key] ? 0 : data[a][key] < data[b][key];
+      });
+      return this.ids;
+    }.bind(data);
+
+    console.log('userfactory Init', data);
+
+    return data;
   }
 })(angular);
 
