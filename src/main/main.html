@@ -1,17 +1,37 @@
-<table>
+<table id="main_overview_table" class="table table-sm table-hover table-striped table-bordered" style="margin:20px auto">
+  <caption style="caption-side:top;">
+    <h1>Customer Overview</h1>
+    <a ui-sref="customerDetails({customerId: 0})" class="btn btn-primary">
+        Create new customer
+        <span class="badge badge-secondary">{{$ctrl.count}}+</span>
+    </button>
+  </caption>
+  <thead class="thead-inverse">
+    <tr>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>options</th>
+    </tr>
+  </thead>
   <tr ng-repeat="row in $ctrl.users.values.master">
-      <td ng-repeat="col in row">
-        <a>
-          {{ col }}
-        </a>
-      </td>
+      <td> {{row.first_name}} </td>
+      <td> {{row.last_name}} </td>
+      <td> {{row.birthday|ageFilter}} </td>
+      <td> {{row.gender|genderFilter}} </td>
       <td>
-          <button ng-click="$ctrl.onToggleActive({ userId: $ctrl.user.id })">
-              {{ $ctrl.user.active ? "Deactivate" : "Activate" }}
-          </button>
-          <button ng-click="$ctrl.onToggleActive({ userId: $ctrl.user.id })">
-              {{ $ctrl.user.active ? "Deactivate" : "Activate" }}
-          </button>
+          <div class="flex__row">
+              <a ui-sref="customerDetails({customerId: row.customer_id})" class="btn btn-primary">
+                Edit
+              </a>
+            <button class="btn btn-primary" ng-click="$ctrl.delete(row)">
+                Delete
+            </button>
+            <a ui-sref="navi({customerId: row.customer_id})" class="btn btn-success">
+                Navi
+            </a>
+          </div>
       </td>
     </tr>
 </table>

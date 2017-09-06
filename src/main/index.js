@@ -13,9 +13,9 @@
   function config( $stateProvider, $urlServiceProvider) {
     "ngInject";
     // setting self as main route
-    $urlServiceProvider.rules.otherwise({ state: 'userlist' });
-
-    $stateProvider.state('userlist', {
+    $urlServiceProvider.rules.otherwise({ state: 'customerlist' });
+    
+    $stateProvider.state('customerlist', {
       url: '/',
       template: "<main></main>",
     });

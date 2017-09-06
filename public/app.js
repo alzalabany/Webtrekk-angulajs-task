@@ -27,6 +27,96 @@
 (function (angular) {
   'use strict';
 
+  detailsController.$inject = ["usersStore", "$stateParams"];
+  angular.module('webtrekk').controller('detailsController', detailsController);
+
+  function detailsController(usersStore, $stateParams) {
+    "ngInject";
+
+    var _this = this;
+
+    this.$onDestroy = componentWillUnmount.bind(this);
+
+    this.data = usersStore.values.master;
+    this.user = usersStore.values.master[$stateParams.customerId] || {};
+    this.user.birthday = new Date(this.user.birthday);
+    this.user.last_contact = new Date();
+
+    this.$onInit = function () {
+      // do some init stuff
+      Object.keys($stateParams).map(function (key) {
+        _this[key] = $stateParams[key];
+      });
+      console.log('users component', _this, $stateParams);
+    };
+  }
+
+  function componentWillUnmount() {}
+})(angular);
+(function (angular) {
+  'use strict';
+
+  config.$inject = ["$stateProvider", "$urlServiceProvider"];
+  angular.module('webtrekk').config(config).directive('details', detailsDirectionConfig);
+
+  function config($stateProvider, $urlServiceProvider) {
+    "ngInject";
+
+    $stateProvider.state('customerDetails', {
+      url: '/data/{customerId:[0-9]{1,8}}',
+      template: "<details></details>"
+    });
+  }
+
+  function detailsDirectionConfig() {
+    return {
+      templateUrl: '/details/details.html',
+      scope: {},
+      replace: true,
+      controllerAs: "$ctrl",
+      controller: 'detailsController'
+    };
+  }
+})(angular);
+
+angular.module('webtrekk').filter('ageFilter', function () {
+  function calculateAge(birthday) {
+    // birthday is a date
+    if (!birthday) return 'N/A';
+    if (!birthday.getTime) {
+      birthday = new Date(birthday);
+    }
+    var ageDifMs = Date.now() - birthday.getTime();
+    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  }
+
+  return function (birthdate) {
+    return calculateAge(birthdate);
+  };
+});
+angular.module('webtrekk').filter('genderFilter', function () {
+  function genderFilter(gender) {
+    // birthday is a date
+    if (!gender) return 'N/A';
+    var normalized = String(gender).toLowerCase();
+    switch (['m', 'w'].indexOf(normalized)) {
+      case 0:
+        return 'Male';
+      case 1:
+        return 'Female';
+      default:
+        return 'N/A';
+    }
+  }
+
+  return function (gender) {
+    return genderFilter(gender);
+  };
+});
+(function (angular) {
+  'use strict';
+
   config.$inject = ["$stateProvider", "$urlServiceProvider"];
   angular.module('webtrekk').config(config).directive('main', function () {
     return {
@@ -42,9 +132,9 @@
     "ngInject";
     // setting self as main route
 
-    $urlServiceProvider.rules.otherwise({ state: 'userlist' });
+    $urlServiceProvider.rules.otherwise({ state: 'customerlist' });
 
-    $stateProvider.state('userlist', {
+    $stateProvider.state('customerlist', {
       url: '/',
       template: "<main></main>"
     });
@@ -58,7 +148,9 @@
   angular.module('webtrekk').controller('mainController', mainController);
 
   function mainController(usersStore) {
-    var _this = this;
+    "ngInject";
+
+    var _this2 = this;
 
     this.$onDestroy = componentWillUnmount.bind(this);
 
@@ -66,19 +158,15 @@
 
     this.users = usersStore;
 
-    this.demo = {
-      'customer_id': '1',
-      'first_name': 'Peter',
-      'last_name': 'Smith',
-      'birthday': '1996-10-12',
-      'gender': 'm',
-      'last_contact': '2013-06-01',
-      'customer_lifetime_value': '191,12'
-    };
+    this.count = 6;
 
     this.$onInit = function () {
       // do some init stuff
-      console.log('users component', _this);
+      console.log('users component', _this2);
+    };
+
+    this.delete = function (row) {
+      console.log('should delete', row);
     };
   }
 
@@ -87,6 +175,62 @@
   function sortUsers() {}
 })(angular);
 
+(function (angular) {
+  'use strict';
+
+  config.$inject = ["$stateProvider", "$urlServiceProvider"];
+  angular.module('webtrekk').config(config).directive('navi', detailsDirectionConfig);
+
+  function config($stateProvider, $urlServiceProvider) {
+    "ngInject";
+
+    $stateProvider.state('navi', {
+      url: '/navi/{customerId:[0-9]{1,8}}',
+      template: "<navi></navi>"
+    });
+  }
+
+  function detailsDirectionConfig() {
+    return {
+      templateUrl: '/navi/navi.html',
+      scope: {},
+      replace: true,
+      controllerAs: "$ctrl",
+      controller: 'detailsController'
+    };
+  }
+})(angular);
+
+// (function(angular) {
+//   'use strict';
+//   angular.module('webtrekk')
+//          .controller('detailsController', detailsController);
+
+//   function detailsController( usersStore, $stateParams ){
+//     "ngInject";
+//         this.$onDestroy = componentWillUnmount.bind(this);
+
+//         this.data = usersStore.values.master;
+//         this.user = usersStore.values.master[$stateParams.customerId] || {};
+//         this.user.birthday = new Date(this.user.birthday);
+//         this.user.last_contact = new Date();
+
+//         this.$onInit = () => {
+//           // do some init stuff
+//           Object.keys($stateParams).map(key=>{
+//             this[key] = $stateParams[key];
+//           })
+//           console.log('users component', this, $stateParams);
+//         }
+
+//   }
+
+//     function componentWillUnmount(){
+
+//     }
+
+
+//   })(angular);
 (function (angular) {
   'use strict';
 
@@ -117,6 +261,8 @@
   'use strict';
 
   angular.module("webtrekk").run(["$templateCache", function ($templateCache) {
-    $templateCache.put("/main/main.html", "<table>\n <tr ng-repeat=\"row in $ctrl.users.values.master\">\n <td ng-repeat=\"col in row\">\n <a>\n {{ col }}\n </a>\n </td>\n <td>\n <button ng-click=\"$ctrl.onToggleActive({ userId: $ctrl.user.id })\">\n {{ $ctrl.user.active ? \"Deactivate\" : \"Activate\" }}\n </button>\n <button ng-click=\"$ctrl.onToggleActive({ userId: $ctrl.user.id })\">\n {{ $ctrl.user.active ? \"Deactivate\" : \"Activate\" }}\n </button>\n </td>\n </tr>\n</table>");
+    $templateCache.put("/navi/navi.html", "<div class=\"has__form\">\n <h1 ng-if=\"$ctrl.user.customer_id\">{{$ctrl.user.first_name}} {{$ctrl.user.last_name}} Navigation history</h1>\n <h1 ng-if=\"!$ctrl.user.customer_id\">no valid user id provided</h1>\n</div>");
+    $templateCache.put("/main/main.html", "<table id=\"main_overview_table\" class=\"table table-sm table-hover table-striped table-bordered\" style=\"margin:20px auto\">\n <caption style=\"caption-side:top;\">\n <h1>Customer Overview</h1>\n <a ui-sref=\"customerDetails({customerId: 0})\" class=\"btn btn-primary\">\n Create new customer\n <span class=\"badge badge-secondary\">{{$ctrl.count}}+</span>\n </button>\n </caption>\n <thead class=\"thead-inverse\">\n <tr>\n <th>First name</th>\n <th>Last name</th>\n <th>Age</th>\n <th>Gender</th>\n <th>options</th>\n </tr>\n </thead>\n <tr ng-repeat=\"row in $ctrl.users.values.master\">\n <td> {{row.first_name}} </td>\n <td> {{row.last_name}} </td>\n <td> {{row.birthday|ageFilter}} </td>\n <td> {{row.gender|genderFilter}} </td>\n <td>\n <div class=\"flex__row\">\n <a ui-sref=\"customerDetails({customerId: row.customer_id})\" class=\"btn btn-primary\">\n Edit\n </a>\n <button class=\"btn btn-primary\" ng-click=\"$ctrl.delete(row)\">\n Delete\n </button>\n <a ui-sref=\"navi({customerId: row.customer_id})\" class=\"btn btn-success\">\n Navi\n </a>\n </div>\n </td>\n </tr>\n</table>");
+    $templateCache.put("/details/details.html", "<div class=\"has__form\">\n <h1 ng-if=\"$ctrl.user.customer_id\">{{$ctrl.user.first_name}} {{$ctrl.user.last_name}} Details</h1>\n <h1 ng-if=\"!$ctrl.user.customer_id\">Create New user</h1>\n <form>\n <div class=\"form-group\" ng-if=\"$ctrl.user.customer_id\">\n <label for=\"customer_id\">customer id</label>\n <input type=\"number\" class=\"form-control\" id=\"customer_id\" disabled ng-value=\"{{$ctrl.user.customer_id/1}}\" placeholder=\"customer_id\">\n <small ng-if=\"$ctrl.errors.customer_id\" id=\"customer_idHelp\" class=\"form-text text-danger\">{{$ctrl.errors.customer_id}}</small>\n </div>\n\n <div class=\"form-group\">\n <label for=\"first_name\">first name</label>\n <input type=\"string\" class=\"form-control\" id=\"first_name\" ng-model=\"$ctrl.user.first_name\" placeholder=\"first_name\">\n <small ng-if=\"$ctrl.errors.first_name\" id=\"first_nameHelp\" class=\"form-text text-danger\">{{$ctrl.errors.first_name}}</small>\n </div>\n \n <div class=\"form-group\">\n <label for=\"last_name\">last name</label>\n <input type=\"string\" class=\"form-control\" id=\"last_name\" ng-model=\"$ctrl.user.last_name\" placeholder=\"last_name\">\n <small ng-if=\"$ctrl.errors.last_name\" id=\"last_nameHelp\" class=\"form-text text-danger\">{{$ctrl.errors.last_name}}</small>\n </div>\n\n <div class=\"form-group\">\n <label for=\"birthday\">birthday</label>\n <input\n placeholder=\"yyyy-MM-dd\"\n min=\"1970-01-01\" max=\"2017-12-22\" required type=\"date\" class=\"form-control\" id=\"birthday\" ng-model=\"$ctrl.user.birthday\" placeholder=\"birthday\">\n <small ng-if=\"$ctrl.errors.birthday\" id=\"birthdayHelp\" class=\"form-text text-danger\">{{$ctrl.errors.birthday}}</small>\n </div>\n \n <div class=\"form-group\">\n <label for=\"gender\">gender</label>\n <select name=\"gender\" class=\"form-control\" ng-model=\"$ctrl.user.gender\">\n <option value=\"m\">Male</option>\n <option value=\"w\">Female</option>\n </select>\n </div>\n \n <div class=\"form-group\">\n <label for=\"last_contact\">last contact</label>\n <input ng-disabled=\"!$ctrl.user.customer_id\" type=\"date\" class=\"form-control\" id=\"last_contact\" ng-model=\"$ctrl.user.last_contact\" placeholder=\"last_contact\">\n <small ng-if=\"$ctrl.errors.last_contact\" id=\"last_contactHelp\" class=\"form-text text-danger\">{{$ctrl.errors.last_contact}}</small>\n </div>\n \n <div class=\"form-group\">\n <label for=\"customer_lifetime_value\">customer lifetime_value</label>\n <input type=\"string\" class=\"form-control\" id=\"customer_lifetime_value\" ng-model=\"$ctrl.user.customer_lifetime_value\" placeholder=\"customer_lifetime_value\">\n <small ng-if=\"$ctrl.errors.customer_lifetime_value\" id=\"customer_lifetime_valueHelp\" class=\"form-text text-danger\">{{$ctrl.errors.customer_lifetime_value}}</small>\n </div>\n\n <hr/>\n <div style=\"min-width:100%\">\n <button class=\"btn btn-primary\">\n save and go back\n </button>\n <a ui-sref=\"customerlist()\" class=\"btn btn-dark\">\n cancel\n </a>\n </div>\n </form>\n</div>");
   }]);
 })(angular);

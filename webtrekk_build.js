@@ -111,12 +111,13 @@ function updateAppCss(){
    // prepare css;
    var css = glob.sync('**/*.css', globOptions).map(File=>fs.readFileSync(srcDir+'/'+File, "utf8")).join("\n")
    fs.ensureFileSync(appCss);
-   postcss([ autoprefixer ]).process(css).then(function (result) {
+   return postcss([ autoprefixer ]).process(css).then(function (result) {
     result.warnings().forEach(function (warn) {
         console.warn(warn.toString());
     });
     fs.outputFileSync(appCss, result.css);
     console.log('_app.css prefixed and updated');
+    return result;
    });
 }
 

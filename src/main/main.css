@@ -1,0 +1,16 @@
+#main_overview_table .flex__row{
+  display:flex;
+  flex-flow:row wrap;
+  justify-content: center;
+  align-items: center;
+}
+#main_overview_table .flex__row > *{
+  flex: 1;
+}
+
+.btn{
+  cursor: pointer;
+}
+div[ui-view]{
+  padding:10px
+}

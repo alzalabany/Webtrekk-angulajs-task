@@ -1,0 +1,61 @@
+<div class="has__form">
+  <h1 ng-if="$ctrl.user.customer_id">{{$ctrl.user.first_name}} {{$ctrl.user.last_name}} Details</h1>
+  <h1 ng-if="!$ctrl.user.customer_id">Create New user</h1>
+  <form>
+    <div class="form-group" ng-if="$ctrl.user.customer_id">
+      <label for="customer_id">customer id</label>
+      <input type="number" class="form-control" id="customer_id" disabled ng-value="{{$ctrl.user.customer_id/1}}" placeholder="customer_id">
+      <small ng-if="$ctrl.errors.customer_id" id="customer_idHelp" class="form-text text-danger">{{$ctrl.errors.customer_id}}</small>
+    </div>
+
+    <div class="form-group">
+      <label for="first_name">first name</label>
+      <input type="string" class="form-control" id="first_name" ng-model="$ctrl.user.first_name" placeholder="first_name">
+      <small ng-if="$ctrl.errors.first_name" id="first_nameHelp" class="form-text text-danger">{{$ctrl.errors.first_name}}</small>
+    </div>
+    
+    <div class="form-group">
+      <label for="last_name">last name</label>
+      <input type="string" class="form-control" id="last_name" ng-model="$ctrl.user.last_name" placeholder="last_name">
+      <small ng-if="$ctrl.errors.last_name" id="last_nameHelp" class="form-text text-danger">{{$ctrl.errors.last_name}}</small>
+    </div>
+
+    <div class="form-group">
+      <label for="birthday">birthday</label>
+      <input
+        placeholder="yyyy-MM-dd"
+        min="1970-01-01" max="2017-12-22" required type="date" class="form-control" id="birthday" ng-model="$ctrl.user.birthday" placeholder="birthday">
+      <small ng-if="$ctrl.errors.birthday" id="birthdayHelp" class="form-text text-danger">{{$ctrl.errors.birthday}}</small>
+    </div>
+    
+    <div class="form-group">
+      <label for="gender">gender</label>
+      <select name="gender" class="form-control" ng-model="$ctrl.user.gender">
+          <option value="m">Male</option>
+          <option value="w">Female</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="last_contact">last contact</label>
+      <input ng-disabled="!$ctrl.user.customer_id" type="date" class="form-control" id="last_contact" ng-model="$ctrl.user.last_contact" placeholder="last_contact">
+      <small ng-if="$ctrl.errors.last_contact" id="last_contactHelp" class="form-text text-danger">{{$ctrl.errors.last_contact}}</small>
+    </div>
+    
+    <div class="form-group">
+      <label for="customer_lifetime_value">customer lifetime_value</label>
+      <input type="string" class="form-control" id="customer_lifetime_value" ng-model="$ctrl.user.customer_lifetime_value" placeholder="customer_lifetime_value">
+      <small ng-if="$ctrl.errors.customer_lifetime_value" id="customer_lifetime_valueHelp" class="form-text text-danger">{{$ctrl.errors.customer_lifetime_value}}</small>
+    </div>
+
+  <hr/>
+  <div style="min-width:100%">
+  <button class="btn btn-primary">
+      save and go back
+  </button>
+  <a ui-sref="customerlist()" class="btn btn-dark">
+      cancel
+  </a>
+  </div>
+  </form>
+</div>

@@ -10,11 +10,11 @@
     "start": "node ./index.js skip",
     "build": "node ./webtrekk_build.js all",
     "e2e": "npm run build && protractor ./protractor.conf.js",
-    "dev": "concurrently --kill-others \"npm run start\" "
+    "dev": "concurrently --kill-others \"npm run start\" \"npm run test\" "
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/alzalabany/webtrekk.git"
+    "url": "https://gitlab.com/alzalabany/webtrekk-task"
   },
   "author": "Momen Zalabany",
   "license": "ISC",

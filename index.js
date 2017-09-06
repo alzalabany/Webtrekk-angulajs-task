@@ -41,6 +41,12 @@ if(!__DEV__){
   // dont continue..
 }
 
+// send hotreload order to socket.io client
+function reloadIO(emitter){
+  console.log('triggering reload');
+  emitter.emit('reload_please');
+}
+
 readJson(path.join(__dirname+'/package.json'), console.error, false, function (er, data) {
   if (er) {
     console.error("There was an error reading the "+path.join(__dirname+'../package.json')+" file")
@@ -62,19 +68,23 @@ readJson(path.join(__dirname+'/package.json'), console.error, false, function (e
       // console.log(ext+':detected a change on +', path);
       switch (ext) {
         case 'css':
-          console.log('updating css');
-          webtrekk.updateAppCss();
-          return;
+        console.log('updating css');
+          return webtrekk.updateAppCss().then(r=>{
+            if(r.css)
+              io.emit('reload_css', r.css);
+            else
+              reloadIO(io)
+          }).catch(reloadIO)
+          break;
         case 'js':
         case 'html':
           console.log('updating app.js');
           webtrekk.updateAppJsAndHtml();
-          return;
+          break;
         default:
           return;
       }
-      console.log('triggering reload');
-      io.emit('reload_please', { for: 'everyone' });
+      reloadIO(io);
     });
  });
 
