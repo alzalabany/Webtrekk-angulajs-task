@@ -8,8 +8,13 @@ var express = require('express'),
     chokidar = require('chokidar'),
     readJson = require('read-package-json'),
     compression = require('compression'); //gzip resplose
+
 var __DEV__ = process.env.NODE_ENV !== 'production';
 var webtrekk = require('./webtrekk_build');
+
+// set the port of our application
+// process.env.PORT lets the port be set by Heroku
+var port = process.env.PORT || 8080;
 
 console.log('Starting in '+process.env.NODE_ENV+' mode');
 
@@ -35,9 +40,9 @@ app.get('*', function(req, res) {
 });
 
 if(!__DEV__){
-  app.listen(8080);
+  app.listen(port);
   webtrekk.build(false); // rebuild all..
-  return console.log('running on 8080 in production mode');
+  return console.log('running on '+port+' in production mode');
   // dont continue..
 }
 
@@ -56,8 +61,8 @@ readJson(path.join(__dirname+'/package.json'), console.error, false, function (e
   }
     var http = require('http').Server(app),
     io = require('socket.io')(http);
-    http.listen(8080, function(){
-      console.log(data.name+' version:'+data.version+' is running on 8080');
+    http.listen(port, function(){
+      console.log(data.name+' version:'+data.version+' is running on '+port);
     });
     io.on('connection', function(socket){
       console.log('a user connected');
