@@ -13,6 +13,7 @@
   - Every module is contained inside its own folder.
   - root module doesnot depend on any sub.modules
   - allow multiple team to work on separat folders
+  - run development against processed build src, to memic production enviroment
   - include express server ready to deploy for production, nodejs handle
     - Minification
     - Concat of vendor and app files
@@ -77,3 +78,27 @@ angular.component does not support "replace:true" templates, this make styling c
 - using angular.components whould break bootstrap styles, and requires lots of hacking to modify css selectors for bootstrap
 
 - there are many existent bugs assosiated with angular.components and advantage it provides over using angular.directives is not much.
+
+
+## Getting Started
+
+- `yarn run dev` run karma + development server on localhost:8080
+- `yarn run live` build src and run production express server
+- `yarn run deploy-setup` setup heroku
+- `yarn run deploy` push localchanges to remote heroku then open new heroku
+
+
+## Testing
+
+### unit test using jasmin
+
+tests run against all files ending with .spec.js
+
+karma will load /public/app.js which should contain all you app code; for this reason you need to have dev server running if you change any code inside /src folder; since dev server will rebuild public/app.js file automaticly
+
+- `yarn run test` will run karma only in watch mode; so prefer use `yarn run dev` to run both dev server and karma server.
+- all files end with .spec.js
+
+### e2e using protractor
+
+- `yarn run e2e`

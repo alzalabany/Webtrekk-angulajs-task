@@ -1,1 +1,548 @@
-"use strict";var _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};!function(t){t.module("webtrekk",["ui.router"]).config(["$urlServiceProvider","$locationProvider",function(t,e){"ngInject";e.html5Mode(!0)}])}(angular),function(t){function e(t,e){"ngInject";(function(){t.load(),this.user=t.byId[e.customerId]||{},this.user.birthday=new Date(this.user.birthday)}).call(this)}e.$inject=["UsersData","$stateParams"],t.module("webtrekk").controller("detailsController",e)}(angular),function(t){function e(t,e){"ngInject";t.state("customerDetails",{url:"/data/{customerId:[0-9]{1,8}}",template:"<details></details>"})}e.$inject=["$stateProvider","$urlServiceProvider"],t.module("webtrekk").config(e).directive("details",function(){return{templateUrl:"/details/details.html",scope:{},replace:!0,controllerAs:"$ctrl",controller:"detailsController"}})}(angular),angular.module("webtrekk").filter("ageFilter",function(){function t(t){if(!t)return"N/A";t.getTime||(t=new Date(t));var e=Date.now()-t.getTime(),r=new Date(e);return Math.abs(r.getUTCFullYear()-1970)}return function(e){return t(e)}}),angular.module("webtrekk").filter("genderFilter",function(){function t(t){if(!t)return"N/A";var e=String(t).toLowerCase();switch(["m","w"].indexOf(e)){case 0:return"Male";case 1:return"Female";default:return"N/A"}}return function(e){return t(e)}}),function(t){function e(t,e){"ngInject";e.rules.otherwise({state:"customerlist"}),t.state("customerlist",{url:"/",template:"<main></main>"})}e.$inject=["$stateProvider","$urlServiceProvider"],t.module("webtrekk").config(e).directive("main",function(){return{templateUrl:"/main/main.html",scope:{},replace:!0,controllerAs:"$ctrl",controller:"mainController"}})}(angular),function(t){function e(t){"ngInject";t.load(),this.users=t.ids,this.UsersData=t}e.$inject=["UsersData"],t.module("webtrekk").controller("mainController",e)}(angular),function(t){function e(t,e){"ngInject";t.state("navi",{url:"/navi/{customerId:[0-9]{1,8}}",template:"<navi></navi>"})}e.$inject=["$stateProvider","$urlServiceProvider"],t.module("webtrekk").config(e).directive("navi",function(){return{templateUrl:"/navi/navi.html",scope:{},replace:!0,controllerAs:"$ctrl",controller:"navHistoryController"}})}(angular),function(){function t(t,e){"ngInject";(function(){t.load(),this.user=t.byId[e.customerId]||{},this.history=t.getNavigation(e.customerId),console.log(this.history)}).call(this)}t.$inject=["UsersData","$stateParams"],angular.module("webtrekk").controller("navHistoryController",t)}(angular),function(t){function e(t,e,r){"ngInject";return{get:function(){try{var n=JSON.parse(e.getItem(r));if(!n||(void 0===n?"undefined":_typeof(n))!==(void 0===t?"undefined":_typeof(t)))throw"no intialdata";return this._error=null,n}catch(e){return this._error?(this._error=null,console.warn("it looks like StorageEngine has failed... returning vanilla JS"),t):(this.set.call(this,t),this._error=e,this.get())}},set:function(t){e.setItem(r,JSON.stringify(t))},reload:function(){return this.set(t),this.get()}}}e.$inject=["initialState","StorageEngine","STORAGE_ID"],t.module("webtrekk").constant("StorageEngine",localStorage).constant("STORAGE_ID","webtrekk__local").constant("initialState",{master:[{customer_id:"1",first_name:"Peter",last_name:"Smith",birthday:"1996-10-12",gender:"m",last_contact:"2013-06-01",customer_lifetime_value:"191,12"},{customer_id:"2",first_name:"Anna",last_name:"Hopp",birthday:"1987-05-03",gender:"w",last_contact:"2013-07-08",customer_lifetime_value:"50,99"},{customer_id:"3",first_name:"Christian",last_name:"Cox",birthday:"1991-02-21",gender:"m",last_contact:"2013-08-01",customer_lifetime_value:"0"},{customer_id:"4",first_name:"Roxy",last_name:"Fox",birthday:"1979-06-30",gender:"w",last_contact:"2012-01-29",customer_lifetime_value:"213,12"},{customer_id:"5",first_name:"Eric",last_name:"Adam",birthday:"1969-11-21",gender:"m",last_contact:"2013-03-18",customer_lifetime_value:"1019,91"}],navi:[{customer_id:"1",pages:"A",timestamp:"2013-06-01 10:10:12"},{customer_id:"1",pages:"B",timestamp:"2013-06-01 10:11:12"},{customer_id:"1",pages:"A",timestamp:"2013-06-01 10:12:12"},{customer_id:"2",pages:"C",timestamp:"2013-07-08 09:03:09"},{customer_id:"2",pages:"A",timestamp:"2013-07-08 09:09:09"},{customer_id:"2",pages:"D",timestamp:"2013-07-08 09:19:09"},{customer_id:"3",pages:"B",timestamp:"2013-07-08 09:19:09"},{customer_id:"3",pages:"A",timestamp:"2013-07-08 09:19:10"},{customer_id:"4",pages:"D",timestamp:"2013-07-08 09:19:11"},{customer_id:"4",pages:"A",timestamp:"2013-07-08 09:19:12"},{customer_id:"5",pages:"X",timestamp:"2013-07-08 09:19:13"},{customer_id:"5",pages:"A",timestamp:"2013-07-08 09:19:14"},{customer_id:"5",pages:"B",timestamp:"2013-07-08 09:19:15"}]}).factory("$wt_storage",e)}(angular),function(){function t(t){"ngInject";var e=this;this.load=function(){var e=t.get();return this.byId=e.master.reduce(r,{}),this.naviById=e.navi.reduce(n,{}),this.ids=Object.keys(this.byId),this}.bind(this),this.byId={},this.naviById={},this.ids=[],this.sortBy=function(t){var e=this;return this.ids=this.ids.sort(function(r,n){return e.byId[r][t]-e.byId[n][t]}),this.ids}.bind(this),this.getNavigation=function(t){return e.naviById[t]},this._dynamicSort=function(t,e){var r=1;return"-"===t[0]&&(r=-1,t=t.substr(1)),function(n,a){if(e){var i=e[n],s=e[a];return(i[t]<s[t]?-1:i[t]>s[t]?1:0)*r}return(n[t]<a[t]?-1:n[t]>a[t]?1:0)*r}};var r=function(t,e){return e.birthday=new Date(e.birthday),e.last_contact=new Date(e.last_contact),t[e.customer_id]=e,t},n=function(t,e){return e.timestamp=new Date(e.timestamp),t[e.customer_id]?t[e.customer_id].push(e):t[e.customer_id]=[e],t}}t.$inject=["$wt_storage"],angular.module("webtrekk").service("UsersData",t)}(),angular,function(t){t.module("webtrekk").run(["$templateCache",function(t){t.put("/navi/navi.html",'<div class="has__form">\n <h1 ng-if="$ctrl.user.customer_id">{{$ctrl.user.first_name}} {{$ctrl.user.last_name}} Navigation history</h1>\n <h1 ng-if="!$ctrl.user.customer_id">no valid user id provided</h1>\n\n <table id="main_overview_table" class="table table-sm table-hover table-striped table-bordered" style="margin:20px auto">\n <caption style="caption-side:top;">\n <h1>Customer Overview</h1>\n <a ui-sref="customerlist()" class="btn btn-primary">\n back\n <span class="badge badge-secondary">{{$ctrl.count}}+</span>\n </a>\n </caption>\n <thead class="thead-inverse">\n <tr>\n <th>Pages</th>\n <th>Time stamp</th>\n </tr>\n </thead>\n <tbody>\n <tr ng-repeat="entry in $ctrl.history">\n <th>{{entry.pages}}</th>\n <th>{{entry.timestamp}}</th>\n </tr>\n </tbody>\n </table>\n\n</div>'),t.put("/main/main.html",'<table id="main_overview_table" class="table table-sm table-hover table-striped table-bordered" style="margin:20px auto">\n <caption style="caption-side:top;">\n <h1>Customer Overview</h1>\n <a ui-sref="customerDetails({customerId: 0})" class="btn btn-primary">\n Create new customer\n <span class="badge badge-secondary">{{$ctrl.count}}+</span>\n </button>\n </caption>\n <thead class="thead-inverse">\n <tr>\n <th>First name</th>\n <th>Last name</th>\n <th>Age</th>\n <th>Gender</th>\n <th>options</th>\n </tr>\n </thead>\n <tr ng-repeat="id in $ctrl.users">\n <td> {{::$ctrl.UsersData.byId[id].first_name}} </td>\n <td> {{::$ctrl.UsersData.byId[id].last_name}} </td>\n <td> {{::$ctrl.UsersData.byId[id].birthday|ageFilter}} </td>\n <td> {{::$ctrl.UsersData.byId[id].gender|genderFilter}} </td>\n <td>\n <div class="flex__row">\n <a ui-sref="customerDetails({customerId: id})" class="btn btn-primary">\n Edit\n </a>\n <button class="btn btn-primary" ng-click="$ctrl.delete(id)">\n Delete\n </button>\n <a ui-sref="navi({customerId: id})" class="btn btn-success">\n Navi\n </a>\n </div>\n </td>\n </tr>\n</table>'),t.put("/details/details.html",'<div class="has__form">\n <h1 ng-if="$ctrl.user.customer_id">{{$ctrl.user.first_name}} {{$ctrl.user.last_name}} Details</h1>\n <h1 ng-if="!$ctrl.user.customer_id">Create New user</h1>\n\n <form>\n <div class="form-group" ng-if="$ctrl.user.customer_id">\n <label for="customer_id">customer id</label>\n <input type="number" class="form-control" id="customer_id" disabled ng-value="{{$ctrl.user.customer_id/1}}" placeholder="customer_id">\n <small ng-if="$ctrl.errors.customer_id" id="customer_idHelp" class="form-text text-danger">{{$ctrl.errors.customer_id}}</small>\n </div>\n\n <div class="form-group">\n <label for="first_name">first name</label>\n <input type="string" class="form-control" id="first_name" ng-model="$ctrl.user.first_name" placeholder="first_name">\n <small ng-if="$ctrl.errors.first_name" id="first_nameHelp" class="form-text text-danger">{{$ctrl.errors.first_name}}</small>\n </div>\n \n <div class="form-group">\n <label for="last_name">last name</label>\n <input type="string" class="form-control" id="last_name" ng-model="$ctrl.user.last_name" placeholder="last_name">\n <small ng-if="$ctrl.errors.last_name" id="last_nameHelp" class="form-text text-danger">{{$ctrl.errors.last_name}}</small>\n </div>\n\n <div class="form-group">\n <label for="birthday">birthday</label>\n <input\n placeholder="yyyy-MM-dd"\n min="1970-01-01" max="2017-12-22" required type="date" class="form-control" id="birthday" ng-model="$ctrl.user.birthday" placeholder="birthday">\n <small ng-if="$ctrl.errors.birthday" id="birthdayHelp" class="form-text text-danger">{{$ctrl.errors.birthday}}</small>\n </div>\n \n <div class="form-group">\n <label for="gender">gender</label>\n <select name="gender" class="form-control" ng-model="$ctrl.user.gender">\n <option value="m">Male</option>\n <option value="w">Female</option>\n </select>\n </div>\n \n <div class="form-group">\n <label for="last_contact">last contact</label>\n <input ng-disabled="!$ctrl.user.customer_id" type="date" class="form-control" id="last_contact" ng-model="$ctrl.user.last_contact" placeholder="last_contact">\n <small ng-if="$ctrl.errors.last_contact" id="last_contactHelp" class="form-text text-danger">{{$ctrl.errors.last_contact}}</small>\n </div>\n \n <div class="form-group">\n <label for="customer_lifetime_value">customer lifetime_value</label>\n <input type="string" class="form-control" id="customer_lifetime_value" ng-model="$ctrl.user.customer_lifetime_value" placeholder="customer_lifetime_value">\n <small ng-if="$ctrl.errors.customer_lifetime_value" id="customer_lifetime_valueHelp" class="form-text text-danger">{{$ctrl.errors.customer_lifetime_value}}</small>\n </div>\n\n <hr/>\n <div style="min-width:100%">\n <button class="btn btn-primary">\n save and go back\n </button>\n <a ui-sref="customerlist()" class="btn btn-dark">\n cancel\n </a>\n </div>\n </form>\n</div>')}])}(angular);
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*
+  Main Module Definition.
+  - We will be using RoC reverse control pattern for better flexisblity
+  - The main module is UN-AWARE of any of its dependinces except of 3rd party
+
+  *Rules
+
+  - DO NOT EDIT THIS FILE UNLESS ALL TEAM AGREE THAT ADDING A NEW 3rd PARTY
+    DEPENDENCY TO APP IS OKAY BY EVERY ONE
+  - All Modules should inherit from this main module
+  - All Modules should declare its own Config and Run code blocks,
+    Angular will take care of running them all.
+  - Keep this module Clean, only Global Configurtion should be set here
+*/
+(function (angular) {
+  'use strict';
+
+  angular.module('webtrekk', ['ui.router'
+  // uncomment following if you gona use AMD tool
+  // require('./services').name,
+  // require('./details').name,
+  // require('./main').name,
+  // require('./navi').name,
+  ]).config(["$urlServiceProvider", "$locationProvider", function ($urlServiceProvider, $locationProvider) {
+    "ngInject";
+
+    $locationProvider.html5Mode(true);
+  }]); // use it to inject global 3rd parties
+})(angular);
+
+(function (angular) {
+  'use strict';
+
+  detailsController.$inject = ["UsersData", "$stateParams", "$state"];
+  angular.module('webtrekk').controller('detailsController', detailsController);
+
+  function detailsController(UsersData, $stateParams, $state) {
+    "ngInject";
+
+    activate.call(this);
+
+    ////////////////
+    function activate() {
+      UsersData.load();
+      this.user = UsersData.byId[$stateParams.customerId] || {};
+      this.user.birthday = new Date(this.user.birthday);
+    }
+
+    this.save = function () {
+      UsersData.save();
+      $state.go('customerlist()');
+    };
+  }
+})(angular);
+(function (angular) {
+  'use strict';
+
+  config.$inject = ["$stateProvider", "$urlServiceProvider"];
+  angular.module('webtrekk').config(config).directive('details', detailsDirectionConfig);
+
+  function config($stateProvider, $urlServiceProvider) {
+    "ngInject";
+
+    $stateProvider.state('customerDetails', {
+      url: '/data/{customerId:[0-9]{1,8}}',
+      template: "<details></details>"
+    });
+  }
+
+  function detailsDirectionConfig() {
+    return {
+      templateUrl: '/details/details.html',
+      scope: {},
+      replace: true,
+      controllerAs: "$ctrl",
+      controller: 'detailsController'
+    };
+  }
+})(angular);
+
+angular.module('webtrekk').filter('ageFilter', function () {
+  function calculateAge(birthday) {
+    // birthday is a date
+    if (!birthday) return 'N/A';
+    if (!birthday.getTime) {
+      birthday = new Date(birthday);
+    }
+    var ageDifMs = Date.now() - birthday.getTime();
+    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  }
+
+  return function (birthdate) {
+    return calculateAge(birthdate);
+  };
+});
+angular.module('webtrekk').filter('genderFilter', function () {
+  function genderFilter(gender) {
+    // birthday is a date
+    if (!gender) return 'N/A';
+    var normalized = String(gender).toLowerCase();
+    switch (['m', 'w'].indexOf(normalized)) {
+      case 0:
+        return 'Male';
+      case 1:
+        return 'Female';
+      default:
+        return 'N/A';
+    }
+  }
+
+  return function (gender) {
+    return genderFilter(gender);
+  };
+});
+(function (angular) {
+  'use strict';
+
+  config.$inject = ["$stateProvider", "$urlServiceProvider"];
+  angular.module('webtrekk').config(config).directive('main', function () {
+    return {
+      templateUrl: '/main/main.html',
+      scope: {},
+      replace: true,
+      controllerAs: "$ctrl",
+      controller: 'mainController'
+    };
+  });
+
+  function config($stateProvider, $urlServiceProvider) {
+    "ngInject";
+    // setting self as main route
+
+    $urlServiceProvider.rules.otherwise({ state: 'customerlist' });
+
+    $stateProvider.state('customerlist', {
+      url: '/',
+      template: "<main></main>"
+    });
+  }
+})(angular);
+
+(function (angular) {
+  'use strict';
+
+  mainController.$inject = ["UsersData", "$timeout", "$scope"];
+  angular.module('webtrekk').controller('mainController', mainController);
+
+  function mainController(UsersData, $timeout, $scope) {
+    "ngInject";
+
+    // load data from localStore.. just precation;
+
+    var _this = this;
+
+    UsersData.load();
+    UsersData.sortBy('last_name');
+    this.users = UsersData.ids;
+    this.UsersData = UsersData;
+
+    this.orderBy = 'last_name';
+    this.reverseSort = false;
+
+    this.remove = function (id) {
+      UsersData.remove(id);
+      _this.users = UsersData.ids;
+    };
+
+    this.sort = function (attr) {
+      if (_this.orderBy !== attr) {
+        _this.orderBy = attr;
+        // assure that first click is assending as per requirements
+        _this.reverseSort = false;
+      } else {
+        _this.reverseSort = !_this.reverseSort;
+      }
+      var sign = _this.reverseSort ? '-' : '';
+      _this.users = _this.UsersData.sortBy(sign + _this.orderBy);
+    };
+  }
+})(angular);
+(function (angular) {
+  'use strict';
+
+  config.$inject = ["$stateProvider", "$urlServiceProvider"];
+  angular.module('webtrekk').config(config).directive('navi', detailsDirectionConfig);
+
+  function config($stateProvider, $urlServiceProvider) {
+    "ngInject";
+
+    $stateProvider.state('navi', {
+      url: '/navi/{customerId:[0-9]{1,8}}',
+      template: "<navi></navi>"
+    });
+  }
+
+  function detailsDirectionConfig() {
+    return {
+      templateUrl: '/navi/navi.html',
+      scope: {},
+      replace: true,
+      controllerAs: "$ctrl",
+      controller: 'navHistoryController'
+    };
+  }
+})(angular);
+
+(function () {
+  'use strict';
+
+  navigationController.$inject = ["UsersData", "$stateParams"];
+  angular.module('webtrekk').controller('navHistoryController', navigationController);
+
+  function navigationController(UsersData, $stateParams) {
+    "ngInject";
+
+    activate.call(this);
+
+    ////////////////
+    function activate() {
+      UsersData.load();
+      this.user = UsersData.byId[$stateParams.customerId] || {};
+      this.history = UsersData.naviById[$stateParams.customerId];
+      console.log(this, UsersData);
+    }
+  }
+})(angular);
+
+(function (angular) {
+  'use strict';
+
+  /**
+  * @namespace Storage
+  * @desc interface for offline data fetching and persistence
+  */
+
+  $wt_storage.$inject = ["initialState", "StorageEngine", "STORAGE_ID"];
+  angular.module('webtrekk').constant('StorageEngine', localStorage).constant('STORAGE_ID', 'webtrekk__local').constant('initialState', {
+    master: [{ "customer_id": "1", "first_name": "Peter", "last_name": "Smith", "birthday": "1996-10-12", "gender": "m", "last_contact": "2013-06-01", "customer_lifetime_value": "191,12" }, { "customer_id": "2", "first_name": "Anna", "last_name": "Hopp", "birthday": "1987-05-03", "gender": "w", "last_contact": "2013-07-08", "customer_lifetime_value": "50,99" }, { "customer_id": "3", "first_name": "Christian", "last_name": "Cox", "birthday": "1991-02-21", "gender": "m", "last_contact": "2013-08-01", "customer_lifetime_value": "0" }, { "customer_id": "4", "first_name": "Roxy", "last_name": "Fox", "birthday": "1979-06-30", "gender": "w", "last_contact": "2012-01-29", "customer_lifetime_value": "213,12" }, { "customer_id": "5", "first_name": "Eric", "last_name": "Adam", "birthday": "1969-11-21", "gender": "m", "last_contact": "2013-03-18", "customer_lifetime_value": "1019,91" }],
+    navi: [{ "customer_id": "1", "pages": "A", "timestamp": "2013-06-01 10:10:12" }, { "customer_id": "1", "pages": "B", "timestamp": "2013-06-01 10:11:12" }, { "customer_id": "1", "pages": "A", "timestamp": "2013-06-01 10:12:12" }, { "customer_id": "2", "pages": "C", "timestamp": "2013-07-08 09:03:09" }, { "customer_id": "2", "pages": "A", "timestamp": "2013-07-08 09:09:09" }, { "customer_id": "2", "pages": "D", "timestamp": "2013-07-08 09:19:09" }, { "customer_id": "3", "pages": "B", "timestamp": "2013-07-08 09:19:09" }, { "customer_id": "3", "pages": "A", "timestamp": "2013-07-08 09:19:10" }, { "customer_id": "4", "pages": "D", "timestamp": "2013-07-08 09:19:11" }, { "customer_id": "4", "pages": "A", "timestamp": "2013-07-08 09:19:12" }, { "customer_id": "5", "pages": "X", "timestamp": "2013-07-08 09:19:13" }, { "customer_id": "5", "pages": "A", "timestamp": "2013-07-08 09:19:14" }, { "customer_id": "5", "pages": "B", "timestamp": "2013-07-08 09:19:15" }]
+  }).factory('$wt_storage', $wt_storage);
+
+  /**
+  * @name $wb_storage
+  * @desc main storage service to be consumed by other services
+  * @param {Object} initialState returned if localsorage is null
+  * @param {Object} StorageEngine must implement localStorage interface
+  * @param {String} STORAGE_ID name space for saving
+  * @returns {Object} angular.service
+  * @memberOf Storage
+  * @todo should return a promise
+  * @todo take Storage_id and return a closure !
+  */
+  function $wt_storage(initialState, StorageEngine, STORAGE_ID) {
+    "ngInject";
+
+    var service = {
+      get: get,
+      set: set,
+      reload: reload
+    };
+    return service;
+
+    ////////////////
+    // this.get = ;
+    // this.set = set;
+    // this.reload = reload.bind(this);
+
+    ////////////////
+    function get() {
+      try {
+        var json = JSON.parse(StorageEngine.getItem(STORAGE_ID));
+        if (!json || (typeof json === 'undefined' ? 'undefined' : _typeof(json)) !== (typeof initialState === 'undefined' ? 'undefined' : _typeof(initialState))) {
+          throw 'no intialdata';
+        }
+        this._error = null; // clear _error;
+        return json;
+      } catch (e) {
+        if (this._error) {
+          // there has been a previous error, here is a loop of calling this.get();
+          this._error = null;
+          console.warn('it looks like StorageEngine has failed... returning vanilla JS');
+          return initialState;
+        }
+        this.set.call(this, initialState);
+        this._error = e;
+        return this.get();
+      }
+    }
+    function set(data) {
+      StorageEngine.setItem(STORAGE_ID, JSON.stringify(data));
+    }
+    function reload() {
+      this.set(initialState);
+      return this.get();
+    }
+  }
+})(angular);
+
+(function () {
+  'use strict';
+
+  UsersData.$inject = ["$wt_storage"];
+  angular.module('webtrekk').service('UsersData', UsersData);
+
+  /**
+  * Data Provider Service
+  * @namespace UsersData
+  */
+  function UsersData($wt_storage) {
+    "ngInject";
+
+    var _this2 = this;
+
+    this.load = load.bind(this);
+    this.byId = {};
+    this.naviById = {};
+    this.ids = [];
+    this.sortBy = sortBy.bind(this);
+    this.save = save.bind(this);
+    this.remove = remove.bind(this);
+    this.getNavigation = function (id) {
+      return _this2.naviById[id];
+    };
+
+    ////////////////
+    // for unit testing not part of UserData api
+    this._dynamicSort = _dynamicSort;
+
+    /**
+    * @name Load
+    * @desc load data from localstorage and set this variables
+    * @returns {UsersData}
+    * @memberOf UsersData
+    */
+    function load() {
+      var data = $wt_storage.get();
+      this.byId = data.master.reduce(_masterReducer, {});
+      this.naviById = data.navi.reduce(_naviReducer, {});
+      this.ids = Object.keys(this.byId);
+      return this;
+    }
+
+    function save(id) {
+      var data = {
+        master: Object.values(this.byId),
+        navi: Object.values(this.naviById).reduce(function (a, i) {
+          return a.concat(i);
+        }, [])
+      };
+      $wt_storage.set(data);
+      console.log('saved data');
+    }
+
+    function remove(id) {
+      console.log('removing id', id);
+      var data = {
+        master: Object.values(this.byId).filter(function (i) {
+          return i.customer_id !== id;
+        }),
+        navi: Object.values(this.naviById).reduce(function (a, i) {
+          return a.concat(i);
+        }, []).filter(function (i) {
+          return i.customer_id !== id;
+        })
+      };
+      $wt_storage.set(data);
+      // reload
+      load.call(this);
+    }
+
+    /**
+    * @name sortBy
+    * @desc sort this.ids using a attr
+    * @param {String} attr
+    * @returns {Array} this.ids
+    * @memberOf UsersData
+    */
+    function sortBy(attr) {
+      this.ids = this.ids.sort(_dynamicSort(attr, this.byId));
+      return this.ids;
+    }
+
+    /**
+     * @name _masterReducer
+     * @desc Helper function used to build this.byId
+     * @param {Object} carry
+     * @param {User} item
+     * @memberOf UsersData.load
+     */
+    var _masterReducer = function _masterReducer(carry, item) {
+      item.birthday = new Date(item.birthday);
+      item.last_contact = new Date(item.last_contact);
+      carry[item.customer_id] = item;
+      return carry;
+    };
+    /**
+     * @name _naviReducer
+     * @desc Helper function used to build this.naviById
+     * @param {Object} carry
+     * @param {Navi} item
+     * @memberOf UsersData.load
+     */
+    var _naviReducer = function _naviReducer(carry, item) {
+      item.timestamp = new Date(item.timestamp);
+
+      if (carry[item.customer_id]) {
+        carry[item.customer_id].push(item);
+      } else {
+        carry[item.customer_id] = [item];
+      }
+      return carry;
+    };
+
+    /**
+     * generate sort function
+     * https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript
+     * @param {String} property
+     * @param {Object} $ref to be used if we are sorting array of ids
+     * @todo move into utilities class..
+     */
+    function _dynamicSort(property, $ref) {
+      var sortOrder = 1;
+      if (property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+      }
+      return function (a, b) {
+        if ($ref) {
+          var a_ = $ref[a];
+          var b_ = $ref[b];
+          return (a_[property] < b_[property] ? -1 : a_[property] > b_[property] ? 1 : 0) * sortOrder;
+        } else {
+          return (a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0) * sortOrder;
+        }
+      };
+    }
+  }
+})();
+
+(function (angular) {
+  'use strict';
+  /**
+  * @namespace UsersFactory
+  * @name UsersFactory
+  * @desc
+  * @param {String} UsersFactory
+  * @returns {String}
+  * @memberOf UsersFactory
+  */
+  // angular.module('webtrekk')
+  // .service('$wt_users', dataService)
+  // .factory('$wt', $dataProvider)
+
+  // function $dataProvider(initialState) {
+  //   "ngInject";
+
+  //   return function factory(engine, name, id){
+  //     if(!initialState[name]){
+  //       throw 'invlaid data requested'
+  //     }
+  //     if( !('setItem' in engine) || !('getItem' in engine) ){
+  //       throw 'invlaid engine provided';
+  //     }
+
+  //     const STORAGE_ID = 'webtrekk_'+name;
+  //     const normalize = s => String(s).toLowerCase();
+  //     return {
+  //       name: STORAGE_ID,
+  //       get: function () {
+  //         try{
+  //           var json = JSON.parse(engine.getItem(STORAGE_ID));
+  //           if(!json || typeof json !== typeof initialState[name]){
+  //             throw 'no intialdata';
+  //           }
+  //           return json;
+  //         }catch(e) {
+  //           this.set(initialState[name]);
+  //           return initialState[name];
+  //         }
+  //       },
+  //       getBy: function(val, primary_key){
+  //         let data = this.get();
+  //         let _id = primary_key || 'customer_id';
+  //         val = normalize(val);
+
+  //         return Array.from(data).filter(i=>normalize(i[_id])===val);
+  //       },
+  //       put: function(id, Or){
+  //         let data = this.get();
+  //         return id in data ? data[id] : (Or || null);
+  //       },
+  //       set: function (data) {
+  //         engine.setItem(STORAGE_ID, JSON.stringify(data));
+  //       },
+  //       delete: function(){
+  //         engine.put(STORAGE_ID, []);
+  //       }
+  //     }
+  //   }
+  // }
+
+  // function usersStore($wt_storage){
+  //   "ngInject";
+  //   const master = $dataProvider(localStorage, 'master');
+  //   const navi = $dataProvider(localStorage, 'navi');
+
+  //   const data = {
+  //     navi: navi.get(),
+  //     master: master.get(),
+  //   };
+
+  //   const getNavigations = function(id){
+  //     return data.navi.filter(i=>i.customer_id===this.customer_id);
+  //   };
+
+  //   data.byId = data.master.reduce((carry, item)=>Object.assign(
+  //     carry, {
+  //       [item.customer_id]: Object.assign({
+  //         getNavigations: getNavigations.bind(item)
+  //       },item)
+  //     }),{});
+  //   data.ids = Object.keys(data.byId);
+  //   data.sortBy = function(key){
+  //     this.ids = this.ids.sort((a, b)=>data[a][key] === data[b][key] ? 0 : data[a][key] < data[b][key] );
+  //     return this.ids;
+  //   }.bind(data);
+
+
+  //   console.log('userfactory Init', data);
+
+  //   return data;
+  // }
+})(angular);
+
+(function (angular) {
+  'use strict';
+
+  angular.module("webtrekk").run(["$templateCache", function ($templateCache) {
+    $templateCache.put("/navi/navi.html", "<div class=\"has__form\">\n <h1 ng-if=\"$ctrl.user.customer_id\">{{$ctrl.user.first_name}} {{$ctrl.user.last_name}} Navigation history</h1>\n <h1 ng-if=\"!$ctrl.user.customer_id\">no valid user id provided</h1>\n\n <table id=\"main_overview_table\" class=\"table table-sm table-hover table-striped table-bordered\" style=\"margin:20px auto\">\n <caption style=\"caption-side:top;\">\n <h1>Customer Overview</h1>\n <a ui-sref=\"customerlist()\" class=\"btn btn-primary\">\n back\n <span class=\"badge badge-secondary\">{{$ctrl.count}}+</span>\n </a>\n </caption>\n <thead class=\"thead-inverse\">\n <tr>\n <th>Pages</th>\n <th>Time stamp</th>\n </tr>\n </thead>\n <tbody>\n <tr ng-repeat=\"entry in $ctrl.history\">\n <th>{{entry.pages}}</th>\n <th>{{entry.timestamp}}</th>\n </tr>\n </tbody>\n </table>\n\n</div>");
+    $templateCache.put("/main/main.html", "<table id=\"main_overview_table\" class=\"table table-sm table-hover table-striped table-bordered\" style=\"margin:20px auto\">\n <caption style=\"caption-side:top;\">\n <h1>Customer Overview</h1>\n <a ui-sref=\"customerDetails({customerId: 0})\" class=\"btn btn-primary\">\n Create new customer\n <span class=\"badge badge-secondary\">{{$ctrl.count}}+</span>\n </button>\n </caption>\n <thead class=\"thead-inverse\">\n <tr>\n <th>\n <a style=\"color:white\" href=\"#\" ng-click=\"$ctrl.sort(\'first_name\')\" >\n First Name\n <span ng-show=\"orderBy == \'firstName\'\">\n <span ng-show=\"!$ctrl.reverseSort\">^</span>\n <span ng-show=\"$ctrl.reverseSort\">v</span>\n </span>\n </a>\n </th>\n <th>\n <a style=\"color:white\" href=\"#\" ng-click=\"$ctrl.sort(\'last_name\')\">\n Last Name\n <span ng-show=\"orderBy == \'last_name\'\">\n <span ng-show=\"!$ctrl.reverseSort\">^</span>\n <span ng-show=\"$ctrl.reverseSort\">v</span>\n </span>\n </a>\n </th>\n <th>\n <a style=\"color:white\" href=\"#\" ng-click=\"$ctrl.sort(\'birthday\')\" >\n Age\n <span ng-show=\"orderBy == \'birthday\'\">\n <span ng-show=\"!$ctrl.reverseSort\">^</span>\n <span ng-show=\"$ctrl.reverseSort\">v</span>\n </span>\n </a>\n </th>\n <th>\n <a style=\"color:white\" href=\"#\" ng-click=\"$ctrl.sort(\'gender\')\" >\n Gender\n <span ng-show=\"orderBy == \'gender\'\">\n <span ng-show=\"!$ctrl.reverseSort\">^</span>\n <span ng-show=\"$ctrl.reverseSort\">v</span>\n </span>\n </a>\n </th>\n <th>options</th>\n </tr>\n </thead>\n <tr ng-repeat=\"id in $ctrl.users\">\n <td> {{::$ctrl.UsersData.byId[id].first_name}} </td>\n <td> {{::$ctrl.UsersData.byId[id].last_name}} </td>\n <td> {{::$ctrl.UsersData.byId[id].birthday|ageFilter}} </td>\n <td> {{::$ctrl.UsersData.byId[id].gender|genderFilter}} </td>\n <td>\n <div class=\"flex__row\">\n <a ui-sref=\"customerDetails({customerId: id})\" class=\"btn btn-primary\">\n Edit\n </a>\n <button class=\"btn btn-primary\" ng-click=\"$ctrl.remove(id)\">\n Delete\n </button>\n <a ui-sref=\"navi({customerId: id})\" class=\"btn btn-success\">\n Navi\n </a>\n </div>\n </td>\n </tr>\n</table>");
+    $templateCache.put("/details/details.html", "<div class=\"has__form\">\n <h1 ng-if=\"$ctrl.user.customer_id\">{{$ctrl.user.first_name}} {{$ctrl.user.last_name}} Details</h1>\n <h1 ng-if=\"!$ctrl.user.customer_id\">Create New user</h1>\n\n <form>\n <div class=\"form-group\" ng-if=\"$ctrl.user.customer_id\">\n <label for=\"customer_id\">customer id</label>\n <input type=\"number\" class=\"form-control\" id=\"customer_id\" disabled ng-value=\"{{$ctrl.user.customer_id/1}}\" placeholder=\"customer_id\">\n <small ng-if=\"$ctrl.errors.customer_id\" id=\"customer_idHelp\" class=\"form-text text-danger\">{{$ctrl.errors.customer_id}}</small>\n </div>\n\n <div class=\"form-group\">\n <label for=\"first_name\">first name</label>\n <input type=\"string\" class=\"form-control\" id=\"first_name\" ng-model=\"$ctrl.user.first_name\" placeholder=\"first_name\">\n <small ng-if=\"$ctrl.errors.first_name\" id=\"first_nameHelp\" class=\"form-text text-danger\">{{$ctrl.errors.first_name}}</small>\n </div>\n \n <div class=\"form-group\">\n <label for=\"last_name\">last name</label>\n <input type=\"string\" class=\"form-control\" id=\"last_name\" ng-model=\"$ctrl.user.last_name\" placeholder=\"last_name\">\n <small ng-if=\"$ctrl.errors.last_name\" id=\"last_nameHelp\" class=\"form-text text-danger\">{{$ctrl.errors.last_name}}</small>\n </div>\n\n <div class=\"form-group\">\n <label for=\"birthday\">birthday</label>\n <input\n placeholder=\"yyyy-MM-dd\"\n min=\"1970-01-01\" max=\"2017-12-22\" required type=\"date\" class=\"form-control\" id=\"birthday\" ng-model=\"$ctrl.user.birthday\" placeholder=\"birthday\">\n <small ng-if=\"$ctrl.errors.birthday\" id=\"birthdayHelp\" class=\"form-text text-danger\">{{$ctrl.errors.birthday}}</small>\n </div>\n \n <div class=\"form-group\">\n <label for=\"gender\">gender</label>\n <select name=\"gender\" class=\"form-control\" ng-model=\"$ctrl.user.gender\">\n <option value=\"m\">Male</option>\n <option value=\"w\">Female</option>\n </select>\n </div>\n \n <div class=\"form-group\">\n <label for=\"last_contact\">last contact</label>\n <input ng-disabled=\"!$ctrl.user.customer_id\" type=\"date\" class=\"form-control\" id=\"last_contact\" ng-model=\"$ctrl.user.last_contact\" placeholder=\"last_contact\">\n <small ng-if=\"$ctrl.errors.last_contact\" id=\"last_contactHelp\" class=\"form-text text-danger\">{{$ctrl.errors.last_contact}}</small>\n </div>\n \n <div class=\"form-group\">\n <label for=\"customer_lifetime_value\">customer lifetime_value</label>\n <input type=\"string\" class=\"form-control\" id=\"customer_lifetime_value\" ng-model=\"$ctrl.user.customer_lifetime_value\" placeholder=\"customer_lifetime_value\">\n <small ng-if=\"$ctrl.errors.customer_lifetime_value\" id=\"customer_lifetime_valueHelp\" class=\"form-text text-danger\">{{$ctrl.errors.customer_lifetime_value}}</small>\n </div>\n\n <hr/>\n <div style=\"min-width:100%\">\n <button class=\"btn btn-primary\" ng-click=\"$ctrl.save()\">\n save and go back\n </button>\n <a ui-sref=\"customerlist()\" class=\"btn btn-dark\">\n cancel\n </a>\n </div>\n </form>\n</div>");
+  }]);
+})(angular);

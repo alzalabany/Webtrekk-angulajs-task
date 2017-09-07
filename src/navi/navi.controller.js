@@ -13,8 +13,8 @@
     function activate() {
       UsersData.load();
       this.user = UsersData.byId[$stateParams.customerId] || {};
-      this.history = UsersData.getNavigation($stateParams.customerId);
-      console.log(this.history);
+      this.history = UsersData.naviById[$stateParams.customerId];
+      console.log(this, UsersData);
     }
 
   }

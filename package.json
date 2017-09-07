@@ -12,7 +12,8 @@
     "dev": "concurrently --kill-others \"npm run start\" \"npm run test\" ",
     "deploy-setup": "heroku create",
     "heroku":"heroku open",
-    "deploy":"git push heroku master && heroku open"
+    "deploy":"git push heroku master && heroku open",
+    "heroku-log": "heroku logs --tail"
   },
   "repository": {
     "type": "git",
@@ -56,8 +57,9 @@
     "read-package-json": "^2.0.12",
     "rimraf": "^2.6.1",
     "socket.io": "^2.0.3",
-    "uglify-js": "^3.0.28",
-
+    "uglify-js": "^3.0.28"
+  },
+  "dependencies": {
     "@uirouter/angularjs": "^1.0.6",
     "angular": "1.6.6",
     "bootstrap": "4.0.0-alpha.6"

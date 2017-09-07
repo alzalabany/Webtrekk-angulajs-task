@@ -8,10 +8,42 @@
   </caption>
   <thead class="thead-inverse">
     <tr>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Age</th>
-      <th>Gender</th>
+      <th>
+          <a style="color:white" href="#" ng-click="$ctrl.sort('first_name')" >
+            First Name
+            <span ng-show="orderBy == 'firstName'">
+              <span ng-show="!$ctrl.reverseSort">^</span>
+              <span ng-show="$ctrl.reverseSort">v</span>
+            </span>
+          </a>
+      </th>
+      <th>
+          <a style="color:white" href="#" ng-click="$ctrl.sort('last_name')">
+            Last Name
+            <span ng-show="orderBy == 'last_name'">
+              <span ng-show="!$ctrl.reverseSort">^</span>
+              <span ng-show="$ctrl.reverseSort">v</span>
+            </span>
+          </a>
+      </th>
+      <th>
+          <a style="color:white" href="#" ng-click="$ctrl.sort('birthday')" >
+            Age
+            <span ng-show="orderBy == 'birthday'">
+              <span ng-show="!$ctrl.reverseSort">^</span>
+              <span ng-show="$ctrl.reverseSort">v</span>
+            </span>
+          </a>
+      </th>
+      <th>
+          <a style="color:white" href="#" ng-click="$ctrl.sort('gender')" >
+            Gender
+            <span ng-show="orderBy == 'gender'">
+              <span ng-show="!$ctrl.reverseSort">^</span>
+              <span ng-show="$ctrl.reverseSort">v</span>
+            </span>
+          </a>
+      </th>
       <th>options</th>
     </tr>
   </thead>
@@ -25,7 +57,7 @@
               <a ui-sref="customerDetails({customerId: id})" class="btn btn-primary">
                 Edit
               </a>
-            <button class="btn btn-primary" ng-click="$ctrl.delete(id)">
+            <button class="btn btn-primary" ng-click="$ctrl.remove(id)">
                 Delete
             </button>
             <a ui-sref="navi({customerId: id})" class="btn btn-success">

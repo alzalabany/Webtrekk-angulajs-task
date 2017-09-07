@@ -3,7 +3,7 @@
   angular.module('webtrekk')
          .controller('detailsController', detailsController);
 
-  function detailsController( UsersData, $stateParams ){
+  function detailsController( UsersData, $stateParams, $state ){
     "ngInject";
     activate.call(this);
     
@@ -12,6 +12,11 @@
       UsersData.load();
       this.user = UsersData.byId[$stateParams.customerId] || {};
       this.user.birthday = new Date(this.user.birthday);
+    }
+
+    this.save = function(){
+      UsersData.save();
+      $state.go('customerlist()');
     }
 
   }

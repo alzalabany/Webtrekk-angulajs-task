@@ -17,6 +17,8 @@
     this.naviById = {};
     this.ids  = [];
     this.sortBy = sortBy.bind(this);
+    this.save = save.bind(this);
+    this.remove = remove.bind(this);
     this.getNavigation = id => this.naviById[id];
 
     ////////////////
@@ -38,6 +40,25 @@
       return this;
     }
 
+    function save(id){
+      const data = {
+        master: Object.values(this.byId),
+        navi  : Object.values(this.naviById).reduce((a,i)=>a.concat(i),[]),
+      }
+      $wt_storage.set(data);
+      console.log('saved data');
+    }
+
+    function remove(id){
+      console.log('removing id',id);
+      const data = {
+        master: Object.values(this.byId).filter(i=>i.customer_id!==id),
+        navi  : Object.values(this.naviById).reduce((a,i)=>a.concat(i),[]).filter(i=>i.customer_id!==id),
+      }
+      $wt_storage.set(data);
+      // reload
+      load.call(this);
+    }
 
     /**
     * @name sortBy
@@ -47,7 +68,7 @@
     * @memberOf UsersData
     */
     function sortBy(attr){
-      this.ids = this.ids.sort((a, b)=>this.byId[a][attr] - this.byId[b][attr]);
+      this.ids = this.ids.sort(_dynamicSort(attr, this.byId));
       return this.ids;
     }
 
