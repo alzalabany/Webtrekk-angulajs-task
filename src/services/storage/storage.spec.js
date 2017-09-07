@@ -58,7 +58,11 @@ describe("$wb_Storage", function() {
 
 
   it("should have initial state", function() {
-    expect($storage.get()).toEqual(initialState);
+    const data = $storage.get();
+    for(i in initialState){
+      expect(data[i]).toBeDefined();
+      expect(typeof data[i]).toBe( typeof initialState[i] );
+    }
   });
 
   it("should be able to set data", function() {
@@ -76,6 +80,13 @@ describe("$wb_Storage", function() {
     const actual = JSON.stringify($storage.get());
     const expected = JSON.stringify({});
     expect(actual).toEqual(expected);
+  });
+
+  it("should throw if no initalState and call set", function() {
+    localStorage.removeItem(STORAGE_ID);
+    spyOn($storage, "set");
+    expect($storage.get()).toEqual(initialState);
+    expect($storage.set).toHaveBeenCalled();
   });
 
   it("should be able to reload data to initial state", function() {

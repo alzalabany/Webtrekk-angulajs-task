@@ -21,7 +21,10 @@
     this.save = save.bind(this);
     this.remove = remove.bind(this);
     this.create = create.bind(this);
-    this.getNavigation = id => this.naviById[id];
+    this.reload = ()=>{
+      this._loaded = false;
+      return this.load();
+    }
 
     ////////////////
     // for unit testing not part of UserData api
@@ -34,10 +37,12 @@
     * @memberOf UsersData
     */
     function load() {
+      if(this._loaded) return this;
       const data = $wt_storage.get();
       this.byId = data.master.reduce(_masterReducer,{});
       this.naviById = data.navi.reduce(_naviReducer,{});
       this.ids = Object.keys(this.byId);
+      this._loaded = true;
       return this;
     }
 

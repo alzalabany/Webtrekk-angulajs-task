@@ -5,17 +5,14 @@
     .module('webtrekk')
     .controller('navHistoryController', navigationController);
 
-  function navigationController( UsersData, $stateParams ){
+  function navigationController( UsersData, $scope, $stateParams ){
     "ngInject";
-    activate.call(this);
 
-    ////////////////
-    function activate() {
-      UsersData.load();
-      this.user = UsersData.byId[$stateParams.customerId] || {};
-      this.history = UsersData.naviById[$stateParams.customerId];
-    }
-
+    this.preview = !!$scope.preview;
+    UsersData.load();
+    this.id = $stateParams.customerId || $scope.customer;
+    this.user = UsersData.byId[this.id] || {};
+    this.history = UsersData.naviById[this.id];
   }
 
   })(angular);

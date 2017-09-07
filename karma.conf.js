@@ -38,16 +38,25 @@ module.exports = function(config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: [
-      'spec',
+      // 'spec',
       // Reference: https://github.com/mlex/karma-spec-reporter
       // Set reporter to print detailed results to console
       // 'progress',
+
+      // Reference: https://github.com/caseyWebb/karma-browser-reporter
+      'browser',
 
       // Reference: https://github.com/karma-runner/karma-coverage
       // Output code coverage files
       'coverage'
     ],
 
+    browserReporter: {
+      port: 5432,
+      ignoreSuccessful: false,
+      ignoreFailed: false,
+      ignoreSkipped: false
+    },
 
     // web server port
     port: 9876,

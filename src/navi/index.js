@@ -16,7 +16,10 @@
   function detailsDirectionConfig(){
     return {
       templateUrl: '/navi/navi.html',
-      scope: {},
+      scope: {
+        customer: '<',
+        preview: '<',
+      },
       replace:true,
       controllerAs: "$ctrl",
       controller:'navHistoryController'

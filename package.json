@@ -11,8 +11,8 @@
     "e2e": "npm run build && protractor ./protractor.conf.js",
     "dev": "concurrently --kill-others \"npm run serve\" \"npm run test\" ",
     "deploy-setup": "heroku create",
-    "heroku":"heroku open",
-    "deploy":"git push heroku master && heroku open",
+    "heroku": "heroku open",
+    "deploy": "git push heroku master && heroku open",
     "heroku-log": "heroku logs --tail"
   },
   "repository": {
@@ -40,6 +40,7 @@
     "jasmine-core": "^2.8.0",
     "jasmine-node": "^1.14.5",
     "karma": "^1.7.1",
+    "karma-browser-reporter": "^1.0.3",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.1",
     "karma-firefox-launcher": "^1.0.1",

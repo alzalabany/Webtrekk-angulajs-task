@@ -1,22 +1,5 @@
-.has__form{
-  display: flex;
-  flex-flow: column nowrap;
-  width: 100%;
-  height: calc(100vh - 100px);
-}
-.has__form form{
-  flex:1;
-  overflow: auto;
-  display: flex;
-  flex-flow: row wrap;
-}
-.has__form form > div{
-  flex:1;
-  flex-basis: 50%;
-  padding:0 10px;
-  margin:0;
-  min-width: 250px;
-  max-height: 80px;
-  align-items: flex-start;
-  justify-content: center;
+.scale{
+  height:200px;
+  border:1px dashed;
+  float:right;
 }

@@ -48,18 +48,11 @@
           if(!json || typeof json !== typeof initialState){
             throw 'no intialdata';
           }
-          this._error = null; // clear _error;
           return json;
         }catch(e) {
-          if(this._error){
-            // there has been a previous error, here is a loop of calling this.get();
-            this._error = null;
-            console.warn('it looks like StorageEngine has failed... returning vanilla JS');
-            return initialState;
-          }
           this.set.call(this, initialState);
           this._error = e;
-          return this.get();
+          return initialState;
         }
     }
     function set(data) {
