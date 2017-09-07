@@ -7,6 +7,7 @@ var fs = require('fs-extra'),
     templatecache = require('ng-templatecache'),
     autoprefixer = require('autoprefixer'),
     postcss = require('postcss'),
+    CleanCSS = require('clean-css'),
     vendors = [
         "./node_modules/angular/angular.min.js",
         "./node_modules/@uirouter/angularjs/release/angular-ui-router.min.js"
@@ -127,7 +128,7 @@ return postcss([autoprefixer]).process(css).then(function(result) {
     result.warnings().forEach(function(warn) {
         console.warn(warn.toString());
     });
-    fs.outputFileSync(appCss, result.css);
+    fs.outputFileSync(appCss, new CleanCSS({}).minify(result.css).styles);
     console.log('_app.css prefixed and updated');
     return result;
 });
