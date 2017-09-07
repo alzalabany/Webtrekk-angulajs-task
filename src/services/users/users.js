@@ -21,10 +21,6 @@
     this.save = save.bind(this);
     this.remove = remove.bind(this);
     this.create = create.bind(this);
-    this.reload = ()=>{
-      this._loaded = false;
-      return this.load();
-    }
 
     ////////////////
     // for unit testing not part of UserData api
@@ -37,12 +33,10 @@
     * @memberOf UsersData
     */
     function load() {
-      if(this._loaded) return this;
       const data = $wt_storage.get();
       this.byId = data.master.reduce(_masterReducer,{});
       this.naviById = data.navi.reduce(_naviReducer,{});
       this.ids = Object.keys(this.byId);
-      this._loaded = true;
       return this;
     }
 
@@ -86,9 +80,10 @@
     * @memberOf UsersData
     */
     function remove(id){
+      let _id = `${id}`.toLocaleLowerCase();
       const data = {
-        master: Object.values(this.byId).filter(i=>i.customer_id!==id),
-        navi  : Object.values(this.naviById).reduce((a,i)=>a.concat(i),[]).filter(i=>i.customer_id!==id),
+        master: Object.values(this.byId).filter(i=>`${i.customer_id}`.toLocaleLowerCase()!==_id),
+        navi  : Object.values(this.naviById).reduce((a,i)=>a.concat(i),[]).filter(i=>`${i.customer_id}`.toLocaleLowerCase()!==_id),
       }
       $wt_storage.set(data);
 

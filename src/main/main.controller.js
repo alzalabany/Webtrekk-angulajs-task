@@ -37,6 +37,7 @@
 
     // Delete a Customer and all his navi data;
     function remove(id) {
+      console.log('deleting', id);
       UsersData.remove(id);
       this.users = UsersData.ids;
     }

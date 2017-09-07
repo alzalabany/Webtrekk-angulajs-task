@@ -30,7 +30,7 @@ describe('navHistoryController',function(){
     vm = makeController({},{});
     expect(UsersData.load).toHaveBeenCalled();
   })
-  it('set can customer id from scope',function(){
+  it('set can id from scope',function(){
     vm = makeController({customer:1}, {});
     expect(vm.id).toBe(1);
   })
@@ -39,7 +39,7 @@ describe('navHistoryController',function(){
     expect(vm.id).toBe(1);
   })
   it('then load navi history',function(){
-    vm = makeController({customer: 1}, {});
+    vm = makeController({customer:1}, {});
     expect(vm.history).toBe(UsersData.naviById[1]);
   })
   // UsersData.load();

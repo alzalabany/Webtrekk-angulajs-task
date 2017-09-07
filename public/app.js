@@ -200,6 +200,7 @@ angular.module('webtrekk').filter('genderFilter', function () {
 
     // Delete a Customer and all his navi data;
     function remove(id) {
+      console.log('deleting', id);
       UsersData.remove(id);
       this.users = UsersData.ids;
     }
@@ -378,8 +379,6 @@ angular.module('webtrekk').filter('genderFilter', function () {
   function CustomerData($wt_storage, CustomerClass) {
     "ngInject";
 
-    var _this3 = this;
-
     this.load = load.bind(this);
     this.byId = {};
     this.naviById = {};
@@ -388,10 +387,6 @@ angular.module('webtrekk').filter('genderFilter', function () {
     this.save = save.bind(this);
     this.remove = remove.bind(this);
     this.create = create.bind(this);
-    this.reload = function () {
-      _this3._loaded = false;
-      return _this3.load();
-    };
 
     ////////////////
     // for unit testing not part of UserData api
@@ -404,12 +399,10 @@ angular.module('webtrekk').filter('genderFilter', function () {
     * @memberOf UsersData
     */
     function load() {
-      if (this._loaded) return this;
       var data = $wt_storage.get();
       this.byId = data.master.reduce(_masterReducer, {});
       this.naviById = data.navi.reduce(_naviReducer, {});
       this.ids = Object.keys(this.byId);
-      this._loaded = true;
       return this;
     }
 
@@ -455,14 +448,15 @@ angular.module('webtrekk').filter('genderFilter', function () {
     * @memberOf UsersData
     */
     function remove(id) {
+      var _id = ('' + id).toLocaleLowerCase();
       var data = {
         master: Object.values(this.byId).filter(function (i) {
-          return i.customer_id !== id;
+          return ('' + i.customer_id).toLocaleLowerCase() !== _id;
         }),
         navi: Object.values(this.naviById).reduce(function (a, i) {
           return a.concat(i);
         }, []).filter(function (i) {
-          return i.customer_id !== id;
+          return ('' + i.customer_id).toLocaleLowerCase() !== _id;
         })
       };
       $wt_storage.set(data);
