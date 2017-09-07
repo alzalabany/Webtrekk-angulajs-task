@@ -3,33 +3,13 @@
   angular.module('webtrekk')
          .controller('mainController', mainController);
 
-  function mainController( ){
+  function mainController( UsersData  ){
     "ngInject";
-        this.$onDestroy = componentWillUnmount.bind(this);
-  
-        this.sortUsers = sortUsers.bind(this);
-  
-        this.users = {};
-  
-        this.count = 6;
 
-        this.$onInit = () => {
-          // do some init stuff
-          console.log('users component', this);
-        }
-
-        this.delete = function(row){
-          console.log('should delete', row);
-        }
+    // load data from localStore.. just precation;
+    UsersData.load();
+    this.users = UsersData.ids;
+    this.UsersData = UsersData;
 
   }
-
-    function componentWillUnmount(){
-  
-    }
-  
-    function sortUsers(){
-  
-    }
-  
   })(angular);

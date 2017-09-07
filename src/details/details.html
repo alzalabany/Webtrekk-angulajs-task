@@ -1,6 +1,7 @@
 <div class="has__form">
   <h1 ng-if="$ctrl.user.customer_id">{{$ctrl.user.first_name}} {{$ctrl.user.last_name}} Details</h1>
   <h1 ng-if="!$ctrl.user.customer_id">Create New user</h1>
+
   <form>
     <div class="form-group" ng-if="$ctrl.user.customer_id">
       <label for="customer_id">customer id</label>

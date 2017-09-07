@@ -17,6 +17,11 @@
 
   angular.module('webtrekk', [
     'ui.router'
+    // uncomment following if you gona use AMD tool
+    // require('./services').name,
+    // require('./details').name,
+    // require('./main').name,
+    // require('./navi').name,
   ])
   .config(function($urlServiceProvider, $locationProvider) {
     "ngInject";

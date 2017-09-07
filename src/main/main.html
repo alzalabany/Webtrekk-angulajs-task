@@ -15,20 +15,20 @@
       <th>options</th>
     </tr>
   </thead>
-  <tr ng-repeat="row in $ctrl.users.values.master">
-      <td> {{row.first_name}} </td>
-      <td> {{row.last_name}} </td>
-      <td> {{row.birthday|ageFilter}} </td>
-      <td> {{row.gender|genderFilter}} </td>
+  <tr ng-repeat="id in $ctrl.users">
+      <td> {{::$ctrl.UsersData.byId[id].first_name}} </td>
+      <td> {{::$ctrl.UsersData.byId[id].last_name}} </td>
+      <td> {{::$ctrl.UsersData.byId[id].birthday|ageFilter}} </td>
+      <td> {{::$ctrl.UsersData.byId[id].gender|genderFilter}} </td>
       <td>
           <div class="flex__row">
-              <a ui-sref="customerDetails({customerId: row.customer_id})" class="btn btn-primary">
+              <a ui-sref="customerDetails({customerId: id})" class="btn btn-primary">
                 Edit
               </a>
-            <button class="btn btn-primary" ng-click="$ctrl.delete(row)">
+            <button class="btn btn-primary" ng-click="$ctrl.delete(id)">
                 Delete
             </button>
-            <a ui-sref="navi({customerId: row.customer_id})" class="btn btn-success">
+            <a ui-sref="navi({customerId: id})" class="btn btn-success">
                 Navi
             </a>
           </div>

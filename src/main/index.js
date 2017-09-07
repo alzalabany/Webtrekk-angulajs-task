@@ -14,7 +14,7 @@
     "ngInject";
     // setting self as main route
     $urlServiceProvider.rules.otherwise({ state: 'customerlist' });
-    
+
     $stateProvider.state('customerlist', {
       url: '/',
       template: "<main></main>",

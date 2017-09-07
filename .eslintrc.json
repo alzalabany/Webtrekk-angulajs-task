@@ -1,5 +1,5 @@
 {
-    "extends": ["eslint:recommended", "angular"],
+    "extends": ["eslint:recommended", "airbnb"],
     "plugins": [
         "angular"
     ],

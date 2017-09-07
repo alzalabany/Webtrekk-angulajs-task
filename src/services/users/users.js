@@ -1,6 +1,123 @@
+(function() {
+'use strict';
+
+  angular
+    .module('webtrekk')
+    .service('UsersData', UsersData);
+
+  /**
+  * Data Provider Service
+  * @namespace UsersData
+  */
+  function UsersData($wt_storage) {
+    "ngInject";
+
+    this.load = load.bind(this);
+    this.byId = {};
+    this.naviById = {};
+    this.ids  = [];
+    this.sortBy = sortBy.bind(this);
+    this.getNavigation = id => this.naviById[id];
+
+    ////////////////
+    // for unit testing not part of UserData api
+    this._dynamicSort = _dynamicSort;
+
+
+    /**
+    * @name Load
+    * @desc load data from localstorage and set this variables
+    * @returns {UsersData}
+    * @memberOf UsersData
+    */
+    function load() {
+      const data = $wt_storage.get();
+      this.byId = data.master.reduce(_masterReducer,{});
+      this.naviById = data.navi.reduce(_naviReducer,{});
+      this.ids = Object.keys(this.byId);
+      return this;
+    }
+
+
+    /**
+    * @name sortBy
+    * @desc sort this.ids using a attr
+    * @param {String} attr
+    * @returns {Array} this.ids
+    * @memberOf UsersData
+    */
+    function sortBy(attr){
+      this.ids = this.ids.sort((a, b)=>this.byId[a][attr] - this.byId[b][attr]);
+      return this.ids;
+    }
+
+    /**
+     * @name _masterReducer
+     * @desc Helper function used to build this.byId
+     * @param {Object} carry
+     * @param {User} item
+     * @memberOf UsersData.load
+     */
+    const _masterReducer = (carry, item) => {
+      item.birthday = new Date(item.birthday);
+      item.last_contact = new Date(item.last_contact);
+      carry[item.customer_id] = item;
+      return carry;
+    }
+    /**
+     * @name _naviReducer
+     * @desc Helper function used to build this.naviById
+     * @param {Object} carry
+     * @param {Navi} item
+     * @memberOf UsersData.load
+     */
+    const _naviReducer = (carry, item) => {
+      item.timestamp = new Date(item.timestamp);
+
+      if(carry[item.customer_id]){
+        carry[item.customer_id].push(item);
+      } else {
+        carry[item.customer_id] = [item];
+      }
+      return carry;
+    }
+
+    /**
+     * generate sort function
+     * https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript
+     * @param {String} property
+     * @param {Object} $ref to be used if we are sorting array of ids
+     * @todo move into utilities class..
+     */
+    function _dynamicSort(property, $ref) {
+      var sortOrder = 1;
+      if(property[0] === "-") {
+          sortOrder = -1;
+          property = property.substr(1);
+      }
+      return function (a,b) {
+          if($ref){
+            let a_ = $ref[a];
+            let b_ = $ref[b];
+            return ((a_[property] < b_[property]) ? -1 : (a_[property] > b_[property]) ? 1 : 0) * sortOrder;
+          } else {
+            return ((a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0) * sortOrder;
+          }
+      }
+    }
+  }
+})();
+
 (function(angular) {
   'use strict';
-
+/**
+* @namespace UsersFactory
+* @name UsersFactory
+* @desc
+* @param {String} UsersFactory
+* @returns {String}
+* @memberOf UsersFactory
+*/
   // angular.module('webtrekk')
   // .service('$wt_users', dataService)
   // .factory('$wt', $dataProvider)

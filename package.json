@@ -5,15 +5,19 @@
   "main": "src/module.js",
   "scripts": {
     "test": "karma start",
-    "live": "NODE_ENV=production node ./index.js",
-    "start": "node ./index.js skip",
+    "live": "NODE_ENV=production node ./server.js",
+    "start": "node ./server.js skip",
     "build": "node ./webtrekk_build.js all",
     "e2e": "npm run build && protractor ./protractor.conf.js",
-    "dev": "concurrently --kill-others \"npm run start\" \"npm run test\" "
+    "dev": "concurrently --kill-others \"npm run start\" \"npm run test\" ",
+    "deploy-setup": "heroku create"
   },
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/alzalabany/webtrekk-task"
+  },
+  "engines": {
+    "node": "8.1.4"
   },
   "author": "Momen Zalabany",
   "license": "ISC",

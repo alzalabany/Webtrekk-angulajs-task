@@ -1,4 +1,27 @@
 <div class="has__form">
     <h1 ng-if="$ctrl.user.customer_id">{{$ctrl.user.first_name}} {{$ctrl.user.last_name}} Navigation history</h1>
     <h1 ng-if="!$ctrl.user.customer_id">no valid user id provided</h1>
+
+    <table id="main_overview_table" class="table table-sm table-hover table-striped table-bordered" style="margin:20px auto">
+            <caption style="caption-side:top;">
+              <h1>Customer Overview</h1>
+              <a ui-sref="customerlist()" class="btn btn-primary">
+                  back
+                  <span class="badge badge-secondary">{{$ctrl.count}}+</span>
+              </a>
+            </caption>
+            <thead class="thead-inverse">
+              <tr>
+                <th>Pages</th>
+                <th>Time stamp</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="entry in $ctrl.history">
+                    <th>{{entry.pages}}</th>
+                    <th>{{entry.timestamp}}</th>
+                </tr>
+            </tbody>
+    </table>
+
 </div>

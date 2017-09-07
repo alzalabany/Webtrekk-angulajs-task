@@ -6,57 +6,82 @@
 // .constant('StorageEngine', localStorage)
 
 //
-describe('$wb_Storage used for data persistence', function() {
-  var $storage;
+describe("validate interfaces and constants of $storage service", function() {
   var initialState;
-  var mock = {mock: 1};
+  var StorageEngine;
+  var STORAGE_ID;
+  beforeEach(angular.mock.module("webtrekk"));
+  beforeEach(
+    inject(function(_StorageEngine_, _initialState_,_STORAGE_ID_) {
+      StorageEngine = _StorageEngine_;
+      initialState = _initialState_;
+      STORAGE_ID = _STORAGE_ID_;
+    })
+  );
 
-  beforeEach(angular.mock.module('webtrekk'));
-  beforeEach(inject(function(StorageEngine, _initialState_) {
-    $storage = StorageEngine;
-    initialState = _initialState_;
-    jasmine.addMatchers({
-      toDeepEqual: function() {
-        return {
-          compare: function(actual, expected) {
-            if(expected===actual)return {pass: true, message: 'deep equal'};
-            if(Boolean(expected) !== Boolean(actual) )return {pass: false, message:'not boolean equal'};
-            if(typeof expected !== typeof actual)return {pass: false, message:'type not matching'};
-            var r = Object.keys(expected)
-                        .filter(key=>actual[key] !== expected[key]);
-            return {pass: r.length === 0, debug:r};
-          }
-        }
-      }
-    });
-  }));
-
-  describe('Constant initialState exists', function() {
-    it('should exist', function() {
-      expect(initialState).toBeDefined();
-    });
+  it("initialState should exist", function() {
+    expect(initialState).toBeDefined();
   });
 
-  describe('Storage Service', function() {
+  it("storage engine should exist", function() {
+    expect(StorageEngine).toBeDefined();
+  });
 
-    it('should have initial state', function() {
-      expect( $storage.get() ).toEqual(initialState);
-    })
+  it("STORAGE_ID should be a string > 3 char", function() {
+    expect(typeof STORAGE_ID).toBe('string');
+    expect(STORAGE_ID.length).toBeGreaterThan(3);
+  });
 
-    it('should be able to set data', function() {
-      $storage.set(mock);
-      expect($storage.get()).toEqual(mock);
-    })
-
-    it('should be able to clear data', function() {
-      $storage.clear();
-      expect($storage.get()).toEqual({});
-    })
-
-    it('should be able to reload data to initial state', function() {
-      $storage.reload();
-      expect($storage.get()).toEqual(initialState);
-    })
-
+  it("storage engine should implement getItem, setItem, removeItem", function() {
+    expect(typeof StorageEngine.getItem).toBe('function');
+    expect(typeof StorageEngine.setItem).toBe('function');
+    expect(typeof StorageEngine.removeItem).toBe('function');
   })
+
+})
+
+describe("$wb_Storage", function() {
+  var $storage;
+  var initialState;
+  var STORAGE_ID;
+  var mock = { mock: 1 };
+
+  beforeEach(angular.mock.module("webtrekk"));
+  beforeEach(
+    inject(function($wt_storage,_initialState_, _STORAGE_ID_) {
+      $storage = $wt_storage;
+      initialState = _initialState_;
+      STORAGE_ID = _STORAGE_ID_;
+    })
+  );
+
+
+
+  it("should have initial state", function() {
+    expect($storage.get()).toEqual(initialState);
+  });
+
+  it("should be able to set data", function() {
+    $storage.set(mock);
+    expect($storage.get()).toEqual(mock);
+    expect(localStorage.getItem(STORAGE_ID)).toBe(JSON.stringify(mock));
+  });
+
+  it("should be able to clear localStorage", function() {
+    $storage.set({});
+    expect(localStorage.getItem(STORAGE_ID)).toBe(JSON.stringify({}));
+  });
+
+  it("if cleared should remain empty", function() {
+    const actual = JSON.stringify($storage.get());
+    const expected = JSON.stringify({});
+    expect(actual).toEqual(expected);
+  });
+
+  it("should be able to reload data to initial state", function() {
+    $storage.reload();
+    const actual = JSON.stringify($storage.get());
+    const expected = JSON.stringify(initialState);
+    expect(actual).toEqual(expected);
+  });
 });

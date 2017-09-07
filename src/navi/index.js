@@ -19,7 +19,7 @@
       scope: {},
       replace:true,
       controllerAs: "$ctrl",
-      controller:'detailsController'
+      controller:'navHistoryController'
     }
   }
 

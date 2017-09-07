@@ -1,4 +1,35 @@
-## Webtrekk Sample Angularjs Task
+# Webtrekk Sample Angularjs Task
+
+## Details
+
+- Recived Task: Sept 4th 2017
+- Deadline     : Sept 7th 2017
+- Specs :  [exercise_angularjs_eng.pdf](../exercise_angularjs_eng.pdf)
+
+## Work done
+
+- custome build system using only Node.Js
+  - Great Modularity and Separation of concerns setup
+  - Every module is contained inside its own folder.
+  - root module doesnot depend on any sub.modules
+  - allow multiple team to work on separat folders
+  - include express server ready to deploy for production, nodejs handle
+    - Minification
+    - Concat of vendor and app files
+    - Annotation
+    - Babel Transform for es6
+    - Jasmin Test
+    - hot-reloading using socket.io during development
+    - Protractor E2E testing
+    - Istambule Coverage reports
+    - production ready Express server
+    - html5 mode routing enabled
+    - Node.Js handle lanuching server and building app from /src folder with single command
+    - heroku friendly for rapid deployment.
+- 1 Factory for data persistence
+- 1 data service
+- 3 directives for rouing
+- 1 class for data validation and normalization
 
 ## why no webpack/gulp/grunt or any other task manager/build sys ?
 

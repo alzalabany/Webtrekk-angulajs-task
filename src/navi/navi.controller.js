@@ -1,30 +1,22 @@
-// (function(angular) {
-//   'use strict';
-//   angular.module('webtrekk')
-//          .controller('detailsController', detailsController);
+(function() {
+'use strict';
 
-//   function detailsController( usersStore, $stateParams ){
-//     "ngInject";
-//         this.$onDestroy = componentWillUnmount.bind(this);
+  angular
+    .module('webtrekk')
+    .controller('navHistoryController', navigationController);
 
-//         this.data = usersStore.values.master;
-//         this.user = usersStore.values.master[$stateParams.customerId] || {};
-//         this.user.birthday = new Date(this.user.birthday);
-//         this.user.last_contact = new Date();
+  function navigationController( UsersData, $stateParams ){
+    "ngInject";
+    activate.call(this);
 
-//         this.$onInit = () => {
-//           // do some init stuff
-//           Object.keys($stateParams).map(key=>{
-//             this[key] = $stateParams[key];
-//           })
-//           console.log('users component', this, $stateParams);
-//         }
+    ////////////////
+    function activate() {
+      UsersData.load();
+      this.user = UsersData.byId[$stateParams.customerId] || {};
+      this.history = UsersData.getNavigation($stateParams.customerId);
+      console.log(this.history);
+    }
 
-//   }
+  }
 
-//     function componentWillUnmount(){
-  
-//     }
-
-  
-//   })(angular);
+  })(angular);
