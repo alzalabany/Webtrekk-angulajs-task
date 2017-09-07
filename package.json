@@ -2,11 +2,10 @@
   "name": "webtrekk-angularjs-task",
   "version": "1.0.0",
   "description": "Create\ta\tSingle\tPage\tApplication\tto\tedit\tuser\tdata\tbased\ton\tlocal\tstorage\t(no\tbackend).",
-  "main": "src/module.js",
+  "main": "server.js",
   "scripts": {
     "test": "karma start",
-    "live": "NODE_ENV=production node ./server.js",
-    "start": "node ./server.js skip",
+    "start": "NODE_ENV=production node ./server.js",
     "build": "node ./webtrekk_build.js all",
     "e2e": "npm run build && protractor ./protractor.conf.js",
     "dev": "concurrently --kill-others \"npm run start\" \"npm run test\" ",
