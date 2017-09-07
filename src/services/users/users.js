@@ -1,15 +1,16 @@
-(function() {
+(function( angular ) {
 'use strict';
 
   angular
     .module('webtrekk')
-    .service('UsersData', UsersData);
+    .factory('CustomerClass', () => Customer)
+    .service('UsersData', CustomerData);
 
   /**
   * Data Provider Service
   * @namespace UsersData
   */
-  function UsersData($wt_storage) {
+  function CustomerData($wt_storage, CustomerClass) {
     "ngInject";
 
     this.load = load.bind(this);
@@ -26,7 +27,6 @@
     // for unit testing not part of UserData api
     this._dynamicSort = _dynamicSort;
 
-
     /**
     * @name Load
     * @desc load data from localstorage and set this variables
@@ -38,7 +38,6 @@
       this.byId = data.master.reduce(_masterReducer,{});
       this.naviById = data.navi.reduce(_naviReducer,{});
       this.ids = Object.keys(this.byId);
-
       return this;
     }
 
@@ -49,9 +48,9 @@
     * @memberOf UsersData
     */
     function create(data) {
-      const customer = JSON.parse( JSON.stringify( data ) ); // deep clone
-      customer.customer_id = _findNextId(this.ids);
-      console.log('customer ready', customer);
+      const customer = new CustomerClass( data ); // deep clone
+      customer.customer_id = customer._findNextId(this.ids);
+
       this.byId[customer.customer_id] = customer;
       this.naviById[customer.customer_id] = [];
       this.ids.push(customer.customer_id);
@@ -82,7 +81,6 @@
     * @memberOf UsersData
     */
     function remove(id){
-      console.log('removing id',id);
       const data = {
         master: Object.values(this.byId).filter(i=>i.customer_id!==id),
         navi  : Object.values(this.naviById).reduce((a,i)=>a.concat(i),[]).filter(i=>i.customer_id!==id),
@@ -113,9 +111,7 @@
      * @memberOf UsersData.load
      */
     const _masterReducer = (carry, item) => {
-      item.birthday = new Date(item.birthday);
-      item.last_contact = new Date(item.last_contact);
-      carry[item.customer_id] = item;
+      carry[item.customer_id] = new CustomerClass(item);
       return carry;
     }
     /**
@@ -160,14 +156,49 @@
       }
     }
 
+  }
+
+  /**
+  * @namespace Customer
+  * @desc Customer class can be an angular constant, value, or factory
+  */
+  class Customer{
+    constructor(props={}) {
+      this.customer_id = this._id = String(props.customer_id || '0');
+      this.first_name = String(props.first_name || '');
+      this.last_name = String(props.last_name || '');
+      this.birthday = new Date(props.birthday);
+      this.gender = String(props.gender).toLowerCase();
+      this.last_contact = new Date(props.last_contact);
+      this.customer_lifetime_value = String(props.customer_lifetime_value||'');
+
+      this.isValid = this.isValid.bind(this);
+    }
+
     /**
+    * @name isValid
+    * @desc validate Customer model
+    * @returns {Boolean}
+    * @memberOf Customer
+    */
+    isValid(){
+      return [
+        ['m','w'].indexOf(this.gender) === -1,
+        isNaN(Date.parse(this.birthday)),
+        isNaN(Date.parse(this.last_contact)),
+      ].filter(Boolean).length === 0
+    }
+
+     /**
     * @name _findNextId private function
     * @desc search array of ids and return the next id (last_id+1)
     * @param {Array} findNextId
     * @returns {Number|NaN} NaN if provided a invalid array for ids;
     * @memberOf UsersData.create
+    * @memberOf Customer
+    * @todo i keep it here so that i can access it later in Tests should be moved out to Utils helper service
     */
-    function _findNextId(ids){
+    _findNextId(ids){
 
       var trials = 0;
       var search = Array.from(ids).map(Number).sort();
@@ -180,101 +211,5 @@
 
       return String(i);
     }
-
   }
-})();
-
-(function(angular) {
-  'use strict';
-/**
-* @namespace UsersFactory
-* @name UsersFactory
-* @desc
-* @param {String} UsersFactory
-* @returns {String}
-* @memberOf UsersFactory
-*/
-  // angular.module('webtrekk')
-  // .service('$wt_users', dataService)
-  // .factory('$wt', $dataProvider)
-
-  // function $dataProvider(initialState) {
-  //   "ngInject";
-
-  //   return function factory(engine, name, id){
-  //     if(!initialState[name]){
-  //       throw 'invlaid data requested'
-  //     }
-  //     if( !('setItem' in engine) || !('getItem' in engine) ){
-  //       throw 'invlaid engine provided';
-  //     }
-
-  //     const STORAGE_ID = 'webtrekk_'+name;
-  //     const normalize = s => String(s).toLowerCase();
-  //     return {
-  //       name: STORAGE_ID,
-  //       get: function () {
-  //         try{
-  //           var json = JSON.parse(engine.getItem(STORAGE_ID));
-  //           if(!json || typeof json !== typeof initialState[name]){
-  //             throw 'no intialdata';
-  //           }
-  //           return json;
-  //         }catch(e) {
-  //           this.set(initialState[name]);
-  //           return initialState[name];
-  //         }
-  //       },
-  //       getBy: function(val, primary_key){
-  //         let data = this.get();
-  //         let _id = primary_key || 'customer_id';
-  //         val = normalize(val);
-
-  //         return Array.from(data).filter(i=>normalize(i[_id])===val);
-  //       },
-  //       put: function(id, Or){
-  //         let data = this.get();
-  //         return id in data ? data[id] : (Or || null);
-  //       },
-  //       set: function (data) {
-  //         engine.setItem(STORAGE_ID, JSON.stringify(data));
-  //       },
-  //       delete: function(){
-  //         engine.put(STORAGE_ID, []);
-  //       }
-  //     }
-  //   }
-  // }
-
-  // function usersStore($wt_storage){
-  //   "ngInject";
-  //   const master = $dataProvider(localStorage, 'master');
-  //   const navi = $dataProvider(localStorage, 'navi');
-
-  //   const data = {
-  //     navi: navi.get(),
-  //     master: master.get(),
-  //   };
-
-  //   const getNavigations = function(id){
-  //     return data.navi.filter(i=>i.customer_id===this.customer_id);
-  //   };
-
-  //   data.byId = data.master.reduce((carry, item)=>Object.assign(
-  //     carry, {
-  //       [item.customer_id]: Object.assign({
-  //         getNavigations: getNavigations.bind(item)
-  //       },item)
-  //     }),{});
-  //   data.ids = Object.keys(data.byId);
-  //   data.sortBy = function(key){
-  //     this.ids = this.ids.sort((a, b)=>data[a][key] === data[b][key] ? 0 : data[a][key] < data[b][key] );
-  //     return this.ids;
-  //   }.bind(data);
-
-
-  //   console.log('userfactory Init', data);
-
-  //   return data;
-  // }
-})(angular);
+})( angular );

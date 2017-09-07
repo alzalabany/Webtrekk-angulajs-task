@@ -112,15 +112,11 @@ function updateAppJsAndHtml() {
   src = babel.transform(src, babelOptions).code;
   src = ngAnnotate(src, { add: true, remove: true }).src;
   src = (__PRO__) ? UglifyJS.minify(src) : { code: src };
-
-  if (!src.error && !src.warnings) {
-      fs.ensureFileSync(app);
-      fs.outputFileSync(app, src.code);
-      console.log('_app.js updated');
-  } else {
-      console.log('app.js failed');
-      console.log(src);
-  }
+  fs.ensureFileSync(app);
+  return fs.outputFile(app, src.code).then(r=>{
+    console.log('_app.js updated in '+(__PRO__ ? 'production':'debug'));
+    return r;
+  });
 }
 
 function updateAppCss() {

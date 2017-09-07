@@ -47,11 +47,11 @@
       <th>options</th>
     </tr>
   </thead>
-  <tr ng-repeat="id in $ctrl.users">
-      <td> {{::$ctrl.UsersData.byId[id].first_name}} </td>
-      <td> {{::$ctrl.UsersData.byId[id].last_name}} </td>
-      <td> {{::$ctrl.UsersData.byId[id].birthday|ageFilter}} </td>
-      <td> {{::$ctrl.UsersData.byId[id].gender|genderFilter}} </td>
+  <tr ng-repeat="id in $ctrl.users" ng-class="{{$ctrl.UsersData.byId[id].isValid() ? 'ok' : 'table-danger'}}">
+      <td> {{::$ctrl.read(id,'first_name')}} </td>
+      <td> {{::$ctrl.read(id,'last_name')}} </td>
+      <td> {{::$ctrl.read(id,'birthday')|ageFilter}} </td>
+      <td> {{::$ctrl.read(id,'gender')|genderFilter}} </td>
       <td>
           <div class="flex__row">
               <a ui-sref="customerDetails({customerId: id})" class="btn btn-primary">

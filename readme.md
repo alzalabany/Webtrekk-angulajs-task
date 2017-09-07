@@ -42,6 +42,16 @@ you can deploy directly to heroku.
 - 3 directives for routing
 - 1 class for data validation and normalization
 
+
+## Getting Started
+
+- `yarn run dev` run karma + development server on localhost:8080
+- `yarn run start` build src and run production express server
+- `yarn run serve` build src and run development server without Karma
+- `yarn run deploy-setup` setup Heroku
+- `yarn run deploy` push local changes to remote Heroku then open new Heroku
+
+
 ## why no webpack/gulp/grunt or any other task manager/build sys ?
 
 - Pre-2015, most apps built using AngularJs 1.X did not have access to such new tooling(s)
@@ -89,13 +99,6 @@ angular.component does not support "replace: true" templates, this makes styling
 
 - there are many existent bugs associated with angular.components and advantage it provides over using angular.directives is not much.
 
-
-## Getting Started
-
-- `yarn run dev` run karma + development server on localhost:8080
-- `yarn run live` build src and run production express server
-- `yarn run deploy-setup` setup Heroku
-- `yarn run deploy` push local changes to remote Heroku then open new Heroku
 
 
 ## Testing
