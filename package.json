@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "karma start",
+    "test-once": "karma start --single-run",
     "start": "NODE_ENV=production node ./server.js",
     "build": "node ./webtrekk_build.js all",
     "serve": "node ./server.js all",
@@ -15,6 +16,13 @@
     "deploy": "git push heroku master && heroku open",
     "heroku-log": "heroku logs --tail"
   },
+  "pre-commit": [
+    "test-once",
+    "deploy"
+  ],
+  "post-commit": [
+    "heroku"
+  ],
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/alzalabany/webtrekk-task"
