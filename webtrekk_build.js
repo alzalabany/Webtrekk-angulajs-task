@@ -15,6 +15,7 @@ var fs = require('fs-extra'),
       // "./node_modules/bootstrap/dist/css/bootstrap-reboot.min.css",
       "./node_modules/bootstrap/dist/css/bootstrap.min.css",
     ],
+    enteryFile = 'module.js',
     srcDir   = __dirname + '/src',
     dist     = __dirname + '/public/vendor.js',
     distCss  = __dirname + '/public/vendor.css',
@@ -41,7 +42,6 @@ var globOptions = {
     'index.html',
   ]
 };
-
 
 var __PRO__ = !!(process.env.NODE_ENV === 'production' || process.argv[2]==='prod');
 var src = '';
@@ -91,8 +91,27 @@ cache = `
 `;
 console.log('html cached using ngAnnotate');
 
+// sort files
+// entery Files are loaded first
+// used to concat app.js files
+function sorter (a_, b_) {
+  var a = a_.split('/');
+  var b = b_.split('/');
+  if(b.length < 2 || b_.indexOf(enteryFile)>-1)return +1;
+  if(a.length < 2 || a_.indexOf(enteryFile)>-1)return -1;
+  var l = Math.max(a.length, b.length)
+  for (var i = 0; i < l; i += 1) {
+    if (!(i in a)) return -1
+    if (!(i in b)) return +1
+    if (a[i].toUpperCase() > b[i].toUpperCase()) return +1
+    if (a[i].toUpperCase() < b[i].toUpperCase()) return -1
+    if (a.length < b.length) return -1
+    if (a.length > b.length) return +1
+  }
+}
+
 // prepare app js; and include $templateCache at end;
-var src = glob.sync('**/*.js', globOptions).map(File=>fs.readFileSync(srcDir+'/'+File, "utf8")).concat(cache).join("\n");
+var src = glob.sync('**/*.js', globOptions).sort(sorter).map(File=>fs.readFileSync(srcDir+'/'+File, "utf8")).concat(cache).join("\n");
 src = babel.transform(src, babelOptions).code;
 src = ngAnnotate(src, {add:true, remove:true}).src;
 src = (__PRO__) ? UglifyJS.minify(src) : {code: src};

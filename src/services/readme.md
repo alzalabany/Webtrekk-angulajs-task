@@ -1,11 +1,24 @@
 # StyleGuide
 
-- use services and constants when-ever its possible
-- don't use factory unless its a real factory.
-
 - all services are prefixed by `$wt_` to be clear in controller its a webtrekk service not 3rd parties
 
-## Template
+- service name should be same as folder name
+
+- use JsDoc to document services and namespace them, this can help clarify intentions and generate documentations
+
+```js
+/**
+* Title
+* @namespace NameSpace
+* @name if child of namespace use name
+* @desc
+* @param {String} // if it takes any params
+* @returns {String} // if return value
+* @memberOf UsersFactory // use dot notation for nesed namespaced
+*/
+```
+
+## Templates & StyleGuide
 
 Ref:
 [johnpapa style-guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md#data-services)
@@ -19,8 +32,9 @@ example service
     .module('Module')
     .service('Service', Service);
 
-  Service.inject = ['dependency1'];
   function Service(dependency1) {
+    "ngInject";
+
     this.exposedFn = exposedFn;
 
     ////////////////
@@ -40,6 +54,8 @@ template can be found in refrence above.
 ## Notes
 
 - define all constants and variables your service depend on top of your module.
+  - this helps exposing your consants to other modules
+  - also help in easier mocking data during testing
 
 - Define interfaces inside your .spec files.
 

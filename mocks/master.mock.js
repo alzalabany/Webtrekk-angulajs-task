@@ -1,5 +1,5 @@
-module.exports = {
-  '1': {
+module.exports = [
+  {
     'customer_id': '1',
     'first_name': 'Peter',
     'last_name': 'Smith',
@@ -8,7 +8,7 @@ module.exports = {
     'last_contact': '2013-06-01',
     'customer_lifetime_value': '191,12'
   },
-  '2': {
+  {
     'customer_id': '2',
     'first_name': 'Anna',
     'last_name': 'Hopp',
@@ -17,7 +17,7 @@ module.exports = {
     'last_contact': '2013-07-08',
     'customer_lifetime_value': '50,99'
   },
-  '3': {
+  {
     'customer_id': '3',
     'first_name': 'Christian',
     'last_name': 'Cox',
@@ -26,7 +26,7 @@ module.exports = {
     'last_contact': '2013-08-01',
     'customer_lifetime_value': '0'
   },
-  '4': {
+  {
     'customer_id': '4',
     'first_name': 'Roxy',
     'last_name': 'Fox',
@@ -35,7 +35,7 @@ module.exports = {
     'last_contact': '2012-01-29',
     'customer_lifetime_value': '213,12'
   },
-  '5': {
+  {
     'customer_id': '5',
     'first_name': 'Eric',
     'last_name': 'Adam',
@@ -44,4 +44,4 @@ module.exports = {
     'last_contact': '2013-03-18',
     'customer_lifetime_value': '1019,91'
   }
-};
+];

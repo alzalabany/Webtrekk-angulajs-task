@@ -11,7 +11,7 @@
     })
     .service('$wt_storage', $wt_storage);
 
-
+  // @@todo should return a promise
   function $wt_storage(initialState, StorageEngine, STORAGE_ID) {
     "ngInject";
 

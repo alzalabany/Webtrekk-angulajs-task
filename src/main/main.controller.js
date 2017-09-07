@@ -3,13 +3,13 @@
   angular.module('webtrekk')
          .controller('mainController', mainController);
 
-  function mainController( usersStore ){
+  function mainController( ){
     "ngInject";
         this.$onDestroy = componentWillUnmount.bind(this);
   
         this.sortUsers = sortUsers.bind(this);
   
-        this.users = usersStore;
+        this.users = {};
   
         this.count = 6;
 
