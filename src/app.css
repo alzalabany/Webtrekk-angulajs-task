@@ -1,0 +1,15 @@
+th > a{
+  width:100%;
+  display: block;
+  min-height: 22px;
+}
+th > a > span{
+  font-size: 20px;
+  float: right;
+  position: relative;
+  top: -2px;
+}
+
+.btn{
+  max-width: 200px;
+}

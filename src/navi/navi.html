@@ -2,7 +2,7 @@
     <h1 ng-if="$ctrl.user.customer_id">{{$ctrl.user.first_name}} {{$ctrl.user.last_name}} Navigation history</h1>
     <h1 ng-if="!$ctrl.user.customer_id">no valid user id provided</h1>
 
-    <table id="main_overview_table" class="table table-sm table-hover table-striped table-bordered" style="margin:20px auto">
+    <table ng-init="$reverseSort=false;$attr='pages'" id="main_overview_table" class="table table-sm table-hover table-striped table-bordered" style="margin:20px auto">
             <caption style="caption-side:top;">
               <h1>Customer Overview</h1>
               <a ui-sref="customerlist()" class="btn btn-primary">
@@ -12,12 +12,28 @@
             </caption>
             <thead class="thead-inverse">
               <tr>
-                <th>Pages</th>
-                <th>Time stamp</th>
+                <th>
+                        <a style="color:white" href="#" ng-click="$attr='pages';$reverseSort=!$reverseSort">
+                                Pages
+                                <span ng-show="$attr == 'pages'">
+                                  <span ng-show="!$reverseSort">^</span>
+                                  <span ng-show="$reverseSort">v</span>
+                                </span>
+                              </a>
+                </th>
+                <th>
+                        <a style="color:white" href="#" ng-click="$attr='timestamp';$reverseSort=!$reverseSort">
+                                Time stamp
+                                <span ng-show="$attr == 'timestamp'">
+                                  <span ng-show="!$reverseSort">^</span>
+                                  <span ng-show="$reverseSort">v</span>
+                                </span>
+                              </a>
+                </th>
               </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="entry in $ctrl.history">
+                <tr ng-repeat="entry in $ctrl.history|orderBy:$attr:$reverseSort">
                     <th>{{entry.pages}}</th>
                     <th>{{entry.timestamp}}</th>
                 </tr>

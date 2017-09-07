@@ -10,15 +10,10 @@
   
     <!--bootstrap and our app css file-->
     <link rel="stylesheet" href="vendor.css">
+
+    <!--INJECT_CSS-->
     <link rel="stylesheet" href="app.css">
-  
-    <!--vendor-->
-    <script src="vendor.js"></script>
-
-    <!--our angular app-->
-    <script src="app.js"></script>
-
-    
+    <!--INJECT_CSS-->
   </head>
   
   <body ng-app="webtrekk">
@@ -31,5 +26,16 @@
     </nav>
 
     <div ui-view>Loading Awsomeness..</div>
+
+     <!--vendor-->
+     <script src="vendor.js"></script>
+
+    <!--our angular app-->
+    <script src="app.js"></script>
+
+    <!--START_DEV-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="_socket.js"></script>
+    <!--END_DEV-->
   </body>
   </html>

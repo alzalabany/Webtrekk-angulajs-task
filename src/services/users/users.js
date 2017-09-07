@@ -19,6 +19,7 @@
     this.sortBy = sortBy.bind(this);
     this.save = save.bind(this);
     this.remove = remove.bind(this);
+    this.create = create.bind(this);
     this.getNavigation = id => this.naviById[id];
 
     ////////////////
@@ -29,7 +30,7 @@
     /**
     * @name Load
     * @desc load data from localstorage and set this variables
-    * @returns {UsersData}
+    * @returns {UsersData} to facilitate chaining
     * @memberOf UsersData
     */
     function load() {
@@ -37,18 +38,49 @@
       this.byId = data.master.reduce(_masterReducer,{});
       this.naviById = data.navi.reduce(_naviReducer,{});
       this.ids = Object.keys(this.byId);
+
       return this;
     }
 
-    function save(id){
+    /**
+    * @name Create
+    * @desc Create a new Customer and save to Storage
+    * @returns {UsersData} to facilitate chaining
+    * @memberOf UsersData
+    */
+    function create(data) {
+      const customer = JSON.parse( JSON.stringify( data ) ); // deep clone
+      customer.customer_id = _findNextId(this.ids);
+      console.log('customer ready', customer);
+      this.byId[customer.customer_id] = customer;
+      this.naviById[customer.customer_id] = [];
+      this.ids.push(customer.customer_id);
+
+      return this.save();
+    }
+
+    /**
+    * @name Save
+    * @desc Save current State to Storage
+    * @returns {UsersData} to facilitate chaining
+    * @memberOf UsersData
+    */
+    function save(){
       const data = {
         master: Object.values(this.byId),
         navi  : Object.values(this.naviById).reduce((a,i)=>a.concat(i),[]),
       }
       $wt_storage.set(data);
-      console.log('saved data');
+
+      return this;
     }
 
+    /**
+    * @name Remove
+    * @desc Remove Customer by his id
+    * @returns {UsersData} to facilitate chaining
+    * @memberOf UsersData
+    */
     function remove(id){
       console.log('removing id',id);
       const data = {
@@ -56,6 +88,7 @@
         navi  : Object.values(this.naviById).reduce((a,i)=>a.concat(i),[]).filter(i=>i.customer_id!==id),
       }
       $wt_storage.set(data);
+
       // reload
       load.call(this);
     }
@@ -126,6 +159,28 @@
           }
       }
     }
+
+    /**
+    * @name _findNextId private function
+    * @desc search array of ids and return the next id (last_id+1)
+    * @param {Array} findNextId
+    * @returns {Number|NaN} NaN if provided a invalid array for ids;
+    * @memberOf UsersData.create
+    */
+    function _findNextId(ids){
+
+      var trials = 0;
+      var search = Array.from(ids).map(Number).sort();
+      var i = search[0] + 1;
+
+      while(search.indexOf(i)!==-1 && trials < 100){
+        i = i + 1;
+        trials++;
+      }
+
+      return String(i);
+    }
+
   }
 })();
 

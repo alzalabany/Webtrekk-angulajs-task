@@ -14,9 +14,13 @@
       this.user.birthday = new Date(this.user.birthday);
     }
 
-    this.save = function(){
-      UsersData.save();
-      $state.go('customerlist()');
+    this.save = ()=>{
+      if(!this.user.customer_id){
+        UsersData.create(this.user);
+      } else {
+        UsersData.save();
+      }
+      $state.go('customerlist');
     }
 
   }

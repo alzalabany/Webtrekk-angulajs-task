@@ -8,6 +8,14 @@ well, I tried to come up with something a bit out of the box to make this task m
 - Deadline     : Sept 7th 2017
 - Specs :  [exercise_angularjs_eng.pdf](../exercise_angularjs_eng.pdf)
 
+
+## working demo
+
+you can deploy directly to heroku.
+[https://salty-brushlands-18464.herokuapp.com/](https://salty-brushlands-18464.herokuapp.com/)
+
+[PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/?url=https://salty-brushlands-18464.herokuapp.com/data/4) = 88/100
+
 ## Work done
 
 - custom build system using only Node.Js
