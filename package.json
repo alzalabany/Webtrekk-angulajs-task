@@ -10,7 +10,9 @@
     "build": "node ./webtrekk_build.js all",
     "e2e": "npm run build && protractor ./protractor.conf.js",
     "dev": "concurrently --kill-others \"npm run start\" \"npm run test\" ",
-    "deploy-setup": "heroku create"
+    "deploy-setup": "heroku create",
+    "heroku":"heroku open",
+    "deploy":"git push heroku master && heroku open"
   },
   "repository": {
     "type": "git",
@@ -54,9 +56,8 @@
     "read-package-json": "^2.0.12",
     "rimraf": "^2.6.1",
     "socket.io": "^2.0.3",
-    "uglify-js": "^3.0.28"
-  },
-  "dependencies": {
+    "uglify-js": "^3.0.28",
+
     "@uirouter/angularjs": "^1.0.6",
     "angular": "1.6.6",
     "bootstrap": "4.0.0-alpha.6"
