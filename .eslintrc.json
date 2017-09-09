@@ -1,8 +1,5 @@
 {
-    "extends": ["eslint:recommended", "airbnb"],
-    "plugins": [
-        "angular"
-    ],
+    "extends": ["google"],
     "env": {
         "browser": true,
         "es6": true,
@@ -21,12 +18,8 @@
         "inject"     : false
     },
     "rules": {
-        "no-const-assign": "warn",
-        "no-this-before-super": "warn",
-        "no-undef": "warn",
-        "no-unreachable": "warn",
-        "no-unused-vars": "warn",
-        "constructor-super": "warn",
-        "valid-typeof": "warn"
+        "no-invalid-this": "off",
+        "max-len": "off",
+        "require-jsdoc": "off"
     }
 }

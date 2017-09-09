@@ -1,10 +1,10 @@
 <table id="main_overview_table" class="table table-sm table-hover table-striped table-bordered" style="margin:20px auto">
   <caption style="caption-side:top;">
     <h1>Customer Overview</h1>
-    <a ui-sref="customerDetails({customerId: 0})" class="btn btn-primary">
+    <a id="create_new" ui-sref="customerDetails({customerId: 0})" class="btn btn-primary">
         Create new customer
         <span class="badge badge-secondary">{{$ctrl.count}}+</span>
-    </button>
+    </a>
   </caption>
   <thead class="thead-inverse">
     <tr>
@@ -47,6 +47,7 @@
       <th>options</th>
     </tr>
   </thead>
+  <tbody>
   <tr ng-repeat="id in $ctrl.users" ng-class="{{$ctrl.UsersData.byId[id].isValid() ? 'ok' : 'table-danger'}}">
       <td> {{::$ctrl.read(id,'first_name')}} </td>
       <td> {{::$ctrl.read(id,'last_name')}} </td>
@@ -57,7 +58,7 @@
               <a ui-sref="customerDetails({customerId: id})" class="btn btn-primary">
                 Edit
               </a>
-            <button class="btn btn-danger" ng-click="$ctrl.remove(id)">
+            <button class="btn btn-danger deleteRow" ng-click="$ctrl.remove(id)">
                 Delete
             </button>
             <a ui-sref="navi({customerId: id})" class="btn btn-success">
@@ -66,4 +67,5 @@
           </div>
       </td>
     </tr>
+  </tbody>
 </table>

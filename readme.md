@@ -7,14 +7,26 @@ well, I tried to come up with something a bit out of the box to make this task m
 - Recived Task: Sept 4th 2017
 - Deadline     : Sept 7th 2017
 - Specs :  [exercise_angularjs_eng.pdf](../exercise_angularjs_eng.pdf)
-
+- Test Coverage: 75%
+- demo: https://salty-brushlands-18464.herokuapp.com/
 
 ## working demo
 
-you can deploy directly to heroku.
+you can view demo of app working on heroku.
 [https://salty-brushlands-18464.herokuapp.com/](https://salty-brushlands-18464.herokuapp.com/)
 
 [PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/?url=https://salty-brushlands-18464.herokuapp.com/data/4) = 88/100
+
+## Technologies used
+
+- AngularJS 1.6.*
+- Bootstrap 4
+- Node.JS -build and serve app-
+- socket.io -used during development only for hot-reloading-
+- Git for version control
+- Karma/Jasmin - unit testing -
+- Protractor -e2e tests-
+
 
 ## Work done
 
@@ -25,7 +37,7 @@ you can deploy directly to heroku.
   - allow multiple teams to work on separate folders
   - run development against processed build src, to memic production environment
   - include express server ready to deploy for production, nodejs handle
-    - Minification
+    - Minification using postCss and clean-css
     - Concat of vendor and app files
     - Annotation
     - Babel Transform for es6
@@ -42,7 +54,6 @@ you can deploy directly to heroku.
 - 3 directives for routing
 - 1 class for data validation and normalization
 
-
 ## Getting Started
 
 - `yarn run dev` run karma + development server on localhost:8080
@@ -52,7 +63,16 @@ you can deploy directly to heroku.
 - `yarn run deploy` push local changes to remote Heroku then open new Heroku
 
 
-## why no webpack/gulp/grunt or any other task manager/build sys ?
+## why no modules or CommonJS bunder?
+
+same reason why I used nodes for a build system +
+
+- work with john-papa style guide, and back then < 2015 most angularjs style guides did not use AMD loaders
+- angularJS already provide **its own DI** and Ioc mechanism which we will utilize in this example app. therefor we will not need es6 module.
+- it's not always possible/feasible to port large scale apps into new modular AMD world, so I wanted to experiment creating a build system that supports those apps and compare the outcome with what I could have saved if I used modern web pack/AMD tools.
+
+
+## why no webpack/gulp/grunt or any other task manager ?
 
 - Pre-2015, most apps built using AngularJs 1.X did not have access to such new tooling(s)
 
@@ -62,14 +82,7 @@ i chose to get a bit creative with this task, and try to create a custom build s
 
 i crafted an experimental nodejs + socket.io + express server located @ server.js & webtrekk_build.js, that handle all source code minification, concat, Annotation and even included socket.io to add a hotreload :D !
 
-it was fun to build, although took most of the 48hrs that was given for me to complete the task; I think this Idea of a -build sys- deliver a great team development experience :) ! i actually might continue to explore it further after task completion!
-
-## why no modules nor any AMD loaders?
-
-same reason why I used nodes for a build system +
-
-- I wanted to create a build system that would work with john-papa style guide, and back then < 2015 most angularjs style guide did not use AMD loaders
-- it's not always possible/feasible to port large scale apps into new modular AMD world, so I wanted to experiment creating a build system that supports those apps and compare the outcome with what I could have saved if I used modern web pack/AMD tools.
+it was fun to build; I think this Idea of a -build sys- deliver a great team development experience :) ! i actually might continue to explore it further after task completion!
 
 
 ## why all modules are extending root angular.module?
@@ -124,26 +137,3 @@ with this setup, we can let multiple teams work on multiple sections of the mono
 all components depend on `src/module.js`  while `src/module.js` depends on only 3rd parties.
 
 `module.js` is the entry file for all components, all components will inherit from it, this is a place to add global configuration; only one person should be responsible for updating this file because it will affect all components.
-
-## Getting started
-
-to run both tests and production server
-```shell
-yarn dev
-```
-
-to run server and hot-reload
-```
-yarn start
-```
-
-to run e2e tests (require protractor)
-```
-yarn run e2e
-```
-
-
-to run karma-jasmin unit-tests tests (requires karma)
-```
-yarn run test
-```

@@ -5,26 +5,20 @@
   "main": "server.js",
   "scripts": {
     "test": "karma start",
-    "test-once": "karma start --single-run",
-    "start": "NODE_ENV=production node ./server.js",
-    "build": "node ./webtrekk_build.js all",
-    "serve": "node ./server.js all",
-    "e2e": "npm run build && protractor ./protractor.conf.js",
+    "test-once": "karma start --single-run && npm run e2e",
+    "start": "NODE_ENV=production node ./server/index.js",
+    "build": "node ./server/builder.js all",
+    "serve": "node ./server/index.js all",
+    "e2e": "nightwatch ./src/module.e2e.js",
     "dev": "concurrently --kill-others \"npm run serve\" \"npm run test\" ",
     "deploy-setup": "heroku create",
     "heroku": "heroku open",
     "deploy": "git push heroku master && heroku open",
     "heroku-log": "heroku logs --tail",
-    "prepush": "npm run test-once",
-    "postcommit": "npm run deploy"
+    "prepush": "npm run test-once && npm run eslint",
+    "postcommit": "npm run deploy",
+    "eslint": "eslint --color --fix ./src"
   },
-  "pre-commit": [
-    "test-once",
-    "deploy"
-  ],
-  "post-commit": [
-    "heroku"
-  ],
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/alzalabany/webtrekk-task"
@@ -45,6 +39,8 @@
     "clean-css": "^4.1.8",
     "compression": "^1.7.0",
     "concurrently": "^3.5.0",
+    "eslint": "^4.6.1",
+    "eslint-config-google": "^0.9.1",
     "express": "^4.15.4",
     "fs-extra": "^4.0.1",
     "husky": "^0.14.3",
@@ -63,6 +59,7 @@
     "morgan": "^1.8.2",
     "ng-annotate": "^1.2.2",
     "ng-templatecache": "^0.1.4",
+    "nightwatch": "^0.9.16",
     "node-libs-browser": "^2.0.0",
     "path": "^0.12.7",
     "phantomjs-prebuilt": "^2.1.15",

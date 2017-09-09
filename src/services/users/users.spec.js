@@ -1,4 +1,4 @@
 
-describe('users data service', function() {
+describe('users data service', () => {
 
 });

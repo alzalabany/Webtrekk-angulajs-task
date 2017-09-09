@@ -9,21 +9,22 @@ var fs = require('fs-extra'),
     postcss = require('postcss'),
     CleanCSS = require('clean-css'),
     vendors = [
-        "./node_modules/angular/angular.min.js",
-        "./node_modules/@uirouter/angularjs/release/angular-ui-router.min.js"
+        process.cwd()+"/node_modules/angular/angular.min.js",
+        process.cwd()+"/node_modules/@uirouter/angularjs/release/angular-ui-router.min.js"
     ],
     vendorCss = [
         // "./node_modules/bootstrap/dist/css/bootstrap-reboot.min.css",
-        "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+        process.cwd()+"/node_modules/bootstrap/dist/css/bootstrap.min.css",
     ],
     enteryFile = 'module.js',
-    srcDir = __dirname + '/src',
-    dist = __dirname + '/public/vendor.js',
-    distCss = __dirname + '/public/vendor.css',
-    app = __dirname + '/public/app.js',
-    appCss = __dirname + '/public/app.css',
+    publicDir = process.cwd()+'/public',
+    srcDir = process.cwd() + '/src',
+    dist = publicDir + '/vendor.js',
+    distCss = publicDir+'/vendor.css',
+    app = publicDir + '/app.js',
+    appCss = publicDir + '/app.css',
     index = srcDir + '/index.html',
-    distIndex = __dirname + '/public/index.html'
+    distIndex = publicDir + '/index.html'
     babelOptions = {
       "presets": [
           ["env", {

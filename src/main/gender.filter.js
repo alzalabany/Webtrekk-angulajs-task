@@ -1,9 +1,16 @@
 angular.module('webtrekk')
-.filter('genderFilter', function() {
-  function genderFilter(gender) { // birthday is a date
-      if(!gender)return 'N/A';
-      let normalized = String(gender).toLowerCase();
-      switch (['m','w','f'].indexOf(normalized)) {
+  .filter('genderFilter', () => {
+  /**
+  * @name genderFilter
+  * @desc return full name from gender initial m==>male etc..
+  * @param {String} gender
+  * @return {String}
+  * @memberof Main
+  */
+    function genderFilter(gender) { // birthday is a date
+      if (!gender) return 'N/A';
+      const normalized = String(gender).toLowerCase();
+      switch (['m', 'w', 'f'].indexOf(normalized)) {
         case 0:
           return 'Male';
         case 1:
@@ -12,9 +19,9 @@ angular.module('webtrekk')
         default:
           return 'N/A';
       }
-  }
+    }
 
-  return function(gender) {
-        return genderFilter(gender);
-  }; 
-});
+    return function(gender) {
+      return genderFilter(gender);
+    };
+  });

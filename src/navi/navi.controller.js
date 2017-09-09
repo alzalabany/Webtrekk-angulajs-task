@@ -1,12 +1,16 @@
 (function() {
-'use strict';
-
   angular
     .module('webtrekk')
     .controller('navHistoryController', navigationController);
-
-  function navigationController( UsersData, $scope, $stateParams ){
-    "ngInject";
+  /**
+   * @name NavigationController
+   * @param {UsersData} UsersData
+   * @param {Object} $scope
+   * @param {Object} $stateParams
+   * @memberof Webtrekk_Demo
+  */
+  function navigationController(UsersData, $scope, $stateParams) {
+    'ngInject';
 
     this.preview = !!$scope.preview;
     UsersData.load();
@@ -14,5 +18,4 @@
     this.user = UsersData.byId[this.id] || {};
     this.history = UsersData.naviById[this.id];
   }
-
-  })(angular);
+}(angular));

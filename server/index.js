@@ -10,7 +10,8 @@ var express = require('express'),
     compression = require('compression'); //gzip resplose
 
 var __DEV__ = process.env.NODE_ENV !== 'production';
-var webtrekk = require('./webtrekk_build');
+var webRoot =  process.cwd()+'/public';
+var webtrekk = require('./builder');
 
 // set the port of our application
 // process.env.PORT lets the port be set by Heroku
@@ -33,10 +34,10 @@ app.use(function(req, res, next) {
 
 app.use(morgan('dev'));
 
-app.use(express.static(__dirname + '/public', { redirect: false }));
+app.use(express.static(webRoot, { redirect: false }));
 
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/index.html'));
+  res.sendFile(path.join(webRoot+'/index.html'));
 });
 
 if(!__DEV__){
@@ -52,9 +53,9 @@ function reloadIO(emitter){
   emitter.emit('reload_please');
 }
 
-readJson(path.join(__dirname+'/package.json'), console.error, false, function (er, data) {
+readJson(path.join(process.cwd() + '/package.json'), console.error, false, function (er, data) {
   if (er) {
-    console.error("There was an error reading the "+path.join(__dirname+'../package.json')+" file")
+    console.error("There was an error reading the  package.json file")
     console(er);
     exit(0);
     return;
@@ -67,7 +68,7 @@ readJson(path.join(__dirname+'/package.json'), console.error, false, function (e
     io.on('connection', function(socket){
       console.log('a user connected');
     });
-    chokidar.watch('./src').on('all', (event, path) => {
+    chokidar.watch(process.cwd()+'/src').on('all', (event, path) => {
       if(event==='add')return;
       let ext = path.split('.').pop();
       // console.log(ext+':detected a change on +', path);
