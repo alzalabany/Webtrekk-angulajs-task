@@ -125,15 +125,26 @@ karma will load /public/app.js which should contain all your app code; for this 
 - `yarn run test` will run karma only in watch mode; so prefer use `yarn run dev` to run both dev server and karma server.
 - all files end with .spec.js
 
-### e2e using protractor
+### e2e using NightWatch.js
 
 - `yarn run e2e`
+you need to be running
 
+```
+> npm run start
+> webdriver-manager start
+```
 
-with this setup, we can let multiple teams work on multiple sections of the monolithic app, with complete separation they don't even have to be in the same repo.
+from another terminal so that e2e tests would work
+
 
 ## in nutshell
 
 all components depend on `src/module.js`  while `src/module.js` depends on only 3rd parties.
 
 `module.js` is the entry file for all components, all components will inherit from it, this is a place to add global configuration; only one person should be responsible for updating this file because it will affect all components.
+
+**Disclaimer:**
+
+- All code in this repo was written from scratch by
+*Momen Zalabany* in response to webtrekk task assignment.

@@ -14,8 +14,6 @@ module.exports = {
   },
   'Main Page loaded with initial state ordered by last_name': function(browser) {
     let client = browser
-      .url('http://localhost:8080')
-      .waitForElementVisible('body', 1000)
       .useXpath()
       .assert.containsText('//h1', 'Customer Overview')
       .assert.elementPresent('//table//tr[5]', 'initial state was loaded correctly with 5 rows')
