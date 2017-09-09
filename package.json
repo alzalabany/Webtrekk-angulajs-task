@@ -15,7 +15,7 @@
     "heroku": "heroku open",
     "deploy": "git push heroku master && heroku open",
     "heroku-log": "heroku logs --tail",
-    "prepush": "npm run test-once && npm run eslint",
+    "prepushs": "npm run test-once && npm run eslint",
     "eslint": "eslint --color --fix ./src"
   },
   "repository": {
