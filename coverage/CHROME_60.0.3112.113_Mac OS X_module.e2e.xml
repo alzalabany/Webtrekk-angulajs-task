@@ -5,9 +5,9 @@
 
   <testsuite name="module.e2e"
     errors="0" failures="0" hostname="" id="" package="module.e2e" skipped="0"
-    tests="4" time="5.699" timestamp="Sat, 09 Sep 2017 13:18:18 GMT">
+    tests="4" time="8.338" timestamp="Sat, 09 Sep 2017 13:58:53 GMT">
   
-    <testcase name="Main Page loaded with initial state ordered by last_name" classname="module.e2e" time="3.259" assertions="3">
+    <testcase name="Main Page loaded with initial state ordered by last_name" classname="module.e2e" time="5.781" assertions="3">
 
     
 
@@ -16,7 +16,7 @@
     
     </testcase>
   
-    <testcase name="Navigation Transitions between pages" classname="module.e2e" time="1.617" assertions="8">
+    <testcase name="Navigation Transitions between pages" classname="module.e2e" time="1.668" assertions="8">
 
     
 
@@ -35,7 +35,7 @@
     
     </testcase>
   
-    <testcase name="Testing Sorting by age" classname="module.e2e" time="0.4460" assertions="3">
+    <testcase name="Testing Sorting by age" classname="module.e2e" time="0.4800" assertions="3">
 
     
 
@@ -44,7 +44,7 @@
     
     </testcase>
   
-    <testcase name="can Delete rows in main page" classname="module.e2e" time="0.3770" assertions="3">
+    <testcase name="can Delete rows in main page" classname="module.e2e" time="0.4090" assertions="3">
 
     
 

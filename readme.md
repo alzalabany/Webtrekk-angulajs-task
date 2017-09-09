@@ -8,6 +8,8 @@ well, I tried to come up with something a bit out of the box to make this task m
 - Deadline     : Sept 7th 2017
 - Specs :  [exercise_angularjs_eng.pdf](../exercise_angularjs_eng.pdf)
 - Test Coverage: 75%
+- e2e tests: 16+ test case
+- unit test: 60+ test case
 - demo: https://salty-brushlands-18464.herokuapp.com/
 
 ## working demo
